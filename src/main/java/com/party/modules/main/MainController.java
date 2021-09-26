@@ -4,8 +4,8 @@ import com.party.modules.account.AccountRepository;
 import com.party.modules.account.CurrentAccount;
 import com.party.modules.account.Account;
 import com.party.modules.event.EnrollmentRepository;
-import com.party.modules.study.Study;
-import com.party.modules.study.StudyRepository;
+import com.party.modules.party.Party;
+import com.party.modules.party.PartyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,31 +19,31 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class MainController {
 
-    private final StudyRepository studyRepository;
+    private final PartyRepository partyRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final AccountRepository accountRepository;
 
     @GetMapping("/")
     public String home(@CurrentAccount Account account, Model model) {
         if (account != null) {
-            Account accountLoaded = accountRepository.findAccountWithTagsAndZonesById(account.getId());
+            Account accountLoaded = accountRepository.findAccountWithTagsAndPlatformsById(account.getId());
             model.addAttribute(accountLoaded);
             // 모임 리스트
             model.addAttribute("enrollmentList", enrollmentRepository.findByAccountAndAcceptedOrderByEnrolledAtDesc(accountLoaded, true));
-            //account가 갖고 있는 tags 와 zones 에 대한 study 리스트
-            model.addAttribute("studyList", studyRepository.findByAccount(
+            //account가 갖고 있는 tags 와 platforms 에 대한 party 리스트
+            model.addAttribute("partyList", partyRepository.findByAccount(
                     accountLoaded.getTags(),
-                    accountLoaded.getZones()));
-            //관리중인 스터디 리스트
-            model.addAttribute("studyManagerOf",
-                    studyRepository.findFirst5ByManagersContainingAndClosedOrderByPublishedDateTimeDesc(account, false));
-            //참여중인 스터디 리스트
-            model.addAttribute("studyMemberOf",
-                    studyRepository.findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(account, false));
+                    accountLoaded.getPlatforms()));
+            //관리중인 파티 리스트
+            model.addAttribute("partyManagerOf",
+                    partyRepository.findFirst5ByManagersContainingAndClosedOrderByPublishedDateTimeDesc(account, false));
+            //참여중인 파티 리스트
+            model.addAttribute("partyMemberOf",
+                    partyRepository.findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(account, false));
             return "index-after-login";
         }
-        // 공개된 스터디 리스트
-        model.addAttribute("studyList", studyRepository.findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(true, false));
+        // 공개된 파티 리스트
+        model.addAttribute("partyList", partyRepository.findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(true, false));
         return "index";
     }
 
@@ -53,12 +53,12 @@ public class MainController {
     }
 
     // 검색 페이징
-    @GetMapping("/search/study")
-    public String searchStudy(String keyword, Model model,
+    @GetMapping("/search/party")
+    public String searchParty(String keyword, Model model,
                               @PageableDefault(size = 9, sort = "publishedDateTime", direction = Sort.Direction.DESC)
                                       Pageable pageable) {
-        Page<Study> studyPage = studyRepository.findByKeyword(keyword, pageable);
-        model.addAttribute("studyPage", studyPage);
+        Page<Party> partyPage = partyRepository.findByKeyword(keyword, pageable);
+        model.addAttribute("partyPage", partyPage);
         model.addAttribute("keyword", keyword);
         model.addAttribute("sortProperty",
                 pageable.getSort().toString().contains("publishedDateTime") ? "publishedDateTime" : "memberCount");

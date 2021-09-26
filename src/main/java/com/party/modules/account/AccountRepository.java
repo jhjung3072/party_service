@@ -16,6 +16,6 @@ public interface AccountRepository extends JpaRepository<Account, Long>, Queryds
 
     Account findByNickname(String nickname);
 
-    @EntityGraph(attributePaths = {"tags", "zones"})
-    Account findAccountWithTagsAndZonesById(Long id);
+    @EntityGraph(attributePaths = {"tags", "platforms"})
+    Account findAccountWithTagsAndPlatformsById(Long id);
 }

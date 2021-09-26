@@ -1,8 +1,7 @@
 package com.party.modules.account;
 
-import com.party.modules.study.Study;
 import com.party.modules.tag.Tag;
-import com.party.modules.zone.Zone;
+import com.party.modules.platform.Platform;
 import lombok.*;
 
 import javax.persistence.*;
@@ -43,26 +42,26 @@ public class Account {
 
     private String location;
 
-    @Lob @Basic(fetch = FetchType.EAGER) //Account를 조회할때 즉시 로딩
+    @Lob @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
-    private boolean studyCreatedByEmail;
+    private boolean partyCreatedByEmail;
 
-    private boolean studyCreatedByWeb = true;
+    private boolean partyCreatedByWeb = true;
 
-    private boolean studyEnrollmentResultByEmail;
+    private boolean partyEnrollmentResultByEmail;
 
-    private boolean studyEnrollmentResultByWeb = true;
+    private boolean partyEnrollmentResultByWeb = true;
 
-    private boolean studyUpdatedByEmail;
+    private boolean partyUpdatedByEmail;
 
-    private boolean studyUpdatedByWeb = true;
+    private boolean partyUpdatedByWeb = true;
 
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
 
     @ManyToMany
-    private Set<Zone> zones = new HashSet<>();
+    private Set<Platform> platforms = new HashSet<>();
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();

@@ -50,23 +50,23 @@ public class NotificationController {
     //알림 종류를 구분 후 List에 담아줌
     private void putCategorizedNotifications(Model model, List<Notification> notifications,
                                              long numberOfChecked, long numberOfNotChecked) {
-        List<Notification> newStudyNotifications = new ArrayList<>();
+        List<Notification> newPartyNotifications = new ArrayList<>();
         List<Notification> eventEnrollmentNotifications = new ArrayList<>();
-        List<Notification> watchingStudyNotifications = new ArrayList<>();
+        List<Notification> watchingPartyNotifications = new ArrayList<>();
         for (var notification : notifications) {
             switch (notification.getNotificationType()) {
-                case STUDY_CREATED: newStudyNotifications.add(notification); break;
+                case PARTY_CREATED: newPartyNotifications.add(notification); break;
                 case EVENT_ENROLLMENT: eventEnrollmentNotifications.add(notification); break;
-                case STUDY_UPDATED: watchingStudyNotifications.add(notification); break;
+                case PARTY_UPDATED: watchingPartyNotifications.add(notification); break;
             }
         }
 
         model.addAttribute("numberOfNotChecked", numberOfNotChecked);
         model.addAttribute("numberOfChecked", numberOfChecked);
         model.addAttribute("notifications", notifications);
-        model.addAttribute("newStudyNotifications", newStudyNotifications);
+        model.addAttribute("newPartyNotifications", newPartyNotifications);
         model.addAttribute("eventEnrollmentNotifications", eventEnrollmentNotifications);
-        model.addAttribute("watchingStudyNotifications", watchingStudyNotifications);
+        model.addAttribute("watchingPartyNotifications", watchingPartyNotifications);
     }
 
 }

@@ -22,7 +22,7 @@ public class NicknameValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) { //검증작업
         NicknameForm nicknameForm = (NicknameForm) target;
-        Account byNickname = accountRepository.findByNickname(nicknameForm.getNickname()); //이미 사용중인 닉네임이라면
+        Account byNickname = accountRepository.findByNickname(nicknameForm.getNickname());
         if (byNickname != null) {
             errors.rejectValue("nickname", "wrong.value", "입력하신 닉네임을 사용할 수 없습니다.");
         }

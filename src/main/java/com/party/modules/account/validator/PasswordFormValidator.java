@@ -1,9 +1,11 @@
 package com.party.modules.account.validator;
 
 import com.party.modules.account.form.PasswordForm;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+@Component
 public class PasswordFormValidator implements Validator {
 
     @Override

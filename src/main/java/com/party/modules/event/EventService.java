@@ -3,9 +3,9 @@ package com.party.modules.event;
 import com.party.modules.account.Account;
 import com.party.modules.event.event.EnrollmentAcceptedEvent;
 import com.party.modules.event.event.EnrollmentRejectedEvent;
-import com.party.modules.study.Study;
+import com.party.modules.party.Party;
 import com.party.modules.event.form.EventForm;
-import com.party.modules.study.event.StudyUpdateEvent;
+import com.party.modules.party.event.PartyUpdateEvent;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,11 +25,11 @@ public class EventService {
     private final ApplicationEventPublisher eventPublisher;
 
     // 모임 생성
-    public Event createEvent(Event event, Study study, Account account) {
+    public Event createEvent(Event event, Party party, Account account) {
         event.setCreatedBy(account);
         event.setCreatedDateTime(LocalDateTime.now());
-        event.setStudy(study);
-        eventPublisher.publishEvent(new StudyUpdateEvent(event.getStudy(),
+        event.setParty(party);
+        eventPublisher.publishEvent(new PartyUpdateEvent(event.getParty(),
                 "'" + event.getTitle() + "' 모임을 만들었습니다."));
         return eventRepository.save(event);
     }
@@ -38,14 +38,14 @@ public class EventService {
     public void updateEvent(Event event, EventForm eventForm) {
         modelMapper.map(eventForm, event);
         event.acceptWaitingList();
-        eventPublisher.publishEvent(new StudyUpdateEvent(event.getStudy(),
+        eventPublisher.publishEvent(new PartyUpdateEvent(event.getParty(),
                 "'" + event.getTitle() + "' 모임 정보를 수정했으니 확인하세요."));
     }
 
     // 모임 취소
     public void deleteEvent(Event event) {
         eventRepository.delete(event);
-        eventPublisher.publishEvent(new StudyUpdateEvent(event.getStudy(),
+        eventPublisher.publishEvent(new PartyUpdateEvent(event.getParty(),
                 "'" + event.getTitle() + "' 모임을 취소했습니다."));
     }
 

@@ -20,12 +20,13 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
-    @InitBinder("signUpForm") //signUpForm이라는 데이터를 받을때 검증
+    //signUpForm 을 받을때 검증
+    @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(signUpFormValidator);
     }
 
-    // 회원가입 뷰
+    // 회원가입 Get
     @GetMapping("/sign-up")
     public String signUpForm(Model model) {
         model.addAttribute(new SignUpForm());
@@ -64,7 +65,7 @@ public class AccountController {
         return view;
     }
 
-    // 인증 이메일 확인 요구 뷰
+    // 이메일 인증 확인 요구 뷰
     @GetMapping("/check-email")
     public String checkEmail(@CurrentAccount Account account, Model model) {
         model.addAttribute("email", account.getEmail());
@@ -122,14 +123,13 @@ public class AccountController {
     @GetMapping("/login-by-email")
     public String loginByEmail(String token, String email, Model model) {
         Account account = accountRepository.findByEmail(email);
-        String view = "account/logged-in-by-email";
         if (account == null || !account.isValidToken(token)) {
             model.addAttribute("error", "로그인할 수 없습니다.");
-            return view;
+            return "account/logged-in-by-email";
         }
 
         accountService.login(account);
-        return view;
+        return "account/logged-in-by-email";
     }
 
 }

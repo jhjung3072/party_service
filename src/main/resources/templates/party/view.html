@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+    <div th:replace="fragments.html :: main-nav"></div>
+    <div th:replace="fragments.html :: party-banner"></div>
+    <div class="container">
+        <div th:replace="fragments.html :: party-info"></div>
+        <div th:replace="fragments.html :: party-menu(partyMenu='info')"></div>
+
+        <div class="row px-3 justify-content-center">
+            <div class="col-10 pt-3" th:utext="${party.fullDescription}"></div>
+        </div>
+
+        <div th:replace="fragments.html :: footer"></div>
+    </div>
+    <script th:replace="fragments.html :: tooltip"></script>
+</body>
+</html>

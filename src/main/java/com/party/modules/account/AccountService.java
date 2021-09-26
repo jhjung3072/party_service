@@ -3,7 +3,7 @@ package com.party.modules.account;
 import com.party.modules.account.form.SignUpForm;
 import com.party.infra.config.AppProperties;
 import com.party.modules.tag.Tag;
-import com.party.modules.zone.Zone;
+import com.party.modules.platform.Platform;
 import com.party.infra.mail.EmailMessage;
 import com.party.infra.mail.EmailService;
 import com.party.modules.account.form.Notifications;
@@ -67,13 +67,13 @@ public class AccountService implements UserDetailsService {
                 "&email=" + newAccount.getEmail());
         context.setVariable("nickname", newAccount.getNickname());
         context.setVariable("linkName", "이메일 인증하기");
-        context.setVariable("message", "스터디올래 서비스를 사용하려면 링크를 클릭하세요.");
+        context.setVariable("message", "파티올래 서비스를 사용하려면 링크를 클릭하세요.");
         context.setVariable("host", appProperties.getHost());
         String message = templateEngine.process("mail/simple-link", context);
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(newAccount.getEmail())
-                .subject("스터디올래, 회원 가입 인증")
+                .subject("파티올래, 회원 가입 인증")
                 .message(message)
                 .build();
 
@@ -82,7 +82,7 @@ public class AccountService implements UserDetailsService {
 
     // 1. username과 password를 이용하여 UsernamePasswordAuthenticationToken 인스턴스 생성
     // 2. SecurityContextHolder -> SecurityContext -> Authentication 에 token 을 set
-    // 참고 : https://codevang.tistory.com/273
+    // 참고 : https://flyburi.com/584
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 new UserAccount(account), //principal 객체
@@ -94,7 +94,7 @@ public class AccountService implements UserDetailsService {
     //login 요청이 오면 자동으로 UserDetailsService 타입으로 IoC 되어 있는 loadUserByUsername 함수가 실행
     //입력된 값을 DB에 들어있는 nickname이나 email로 매치되는지 살펴보고 그에 해당하는 유저 데이터를 읽어옴
     // 그 다음 그렇게 읽어온 유저 데이터에는 패스워드가 인코딩 된 값으로 들어있는데, 그 값을 스프링 시큐리티 설정에 연결해 놓은 PasswordEncoder를 사용해서 체크
-    // 참고 : https://flyburi.com/584
+    // 참고 : https://dncjf64.tistory.com/330
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
@@ -136,12 +136,12 @@ public class AccountService implements UserDetailsService {
     // 알림 수정
     public void updateNotifications(Account account, Notifications notifications) {
         modelMapper.map(notifications, account);
-         /*  account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
-        account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
-        account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());
-        account.setStudyUpdatedByEmail(notifications.isStudyUpdatedByEmail());
-        account.setStudyEnrollmentResultByWeb(notifications.isStudyEnrollmentResultByWeb());
-        account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());*/
+         /*  account.setPartyCreatedByWeb(notifications.isPartyCreatedByWeb());
+        account.setPartyCreatedByEmail(notifications.isPartyCreatedByEmail());
+        account.setPartyUpdatedByWeb(notifications.isPartyUpdatedByWeb());
+        account.setPartyUpdatedByEmail(notifications.isPartyUpdatedByEmail());
+        account.setPartyEnrollmentResultByWeb(notifications.isPartyEnrollmentResultByWeb());
+        account.setPartyEnrollmentResultByEmail(notifications.isPartyEnrollmentResultByEmail());*/
         accountRepository.save(account);
     }
 
@@ -158,14 +158,14 @@ public class AccountService implements UserDetailsService {
         context.setVariable("link", "/login-by-email?token=" + account.getEmailCheckToken() +
                 "&email=" + account.getEmail());
         context.setVariable("nickname", account.getNickname());
-        context.setVariable("linkName", "스터디올래 로그인하기");
+        context.setVariable("linkName", "파티올래 로그인하기");
         context.setVariable("message", "로그인 하려면 아래 링크를 클릭하세요.");
         context.setVariable("host", appProperties.getHost());
         String message = templateEngine.process("mail/simple-link", context);
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(account.getEmail())
-                .subject("스터디올래, 로그인 링크")
+                .subject("파티올래, 로그인 링크")
                 .message(message)
                 .build();
         emailService.sendEmail(emailMessage);
@@ -189,22 +189,22 @@ public class AccountService implements UserDetailsService {
         byId.ifPresent(a -> a.getTags().remove(tag));
     }
 
-    // 지역 목록 get
-    public Set<Zone> getZones(Account account) {
+    // 플랫폼 목록 get
+    public Set<Platform> getPlatforms(Account account) {
         Optional<Account> byId = accountRepository.findById(account.getId());
-        return byId.orElseThrow().getZones();
+        return byId.orElseThrow().getPlatforms();
     }
 
-    // 지역 추가
-    public void addZone(Account account, Zone zone) {
+    // 플랫폼 추가
+    public void addPlatform(Account account, Platform platform) {
         Optional<Account> byId = accountRepository.findById(account.getId());
-        byId.ifPresent(a -> a.getZones().add(zone));
+        byId.ifPresent(a -> a.getPlatforms().add(platform));
     }
 
-    // 지역 삭제
-    public void removeZone(Account account, Zone zone) {
+    // 플랫폼 삭제
+    public void removePlatform(Account account, Platform platform) {
         Optional<Account> byId = accountRepository.findById(account.getId());
-        byId.ifPresent(a -> a.getZones().remove(zone));
+        byId.ifPresent(a -> a.getPlatforms().remove(platform));
     }
 
     // 닉네임으로 account get

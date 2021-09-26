@@ -1,13 +1,12 @@
 package com.party.modules.account;
 
+import com.party.modules.platform.Platform;
+import com.party.modules.platform.PlatformRepository;
 import com.party.modules.tag.TagForm;
 import com.party.modules.tag.TagRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.party.modules.account.form.SignUpForm;
 import com.party.modules.tag.Tag;
-import com.party.modules.tag.TagRepository;
-import com.party.modules.zone.Zone;
-import com.party.modules.zone.ZoneRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,9 +41,9 @@ class SettingsControllerTest {
     @Autowired
     TagRepository tagRepository;
     @Autowired
-    ZoneRepository zoneRepository;
+    PlatformRepository platformRepository;
 
-    private Zone testZone = Zone.builder().city("test").localNameOfCity("테스트시").province("테스트주").build();
+    private Platform testPlatform = Platform.builder().koreanNameOfPlatform("넷플릭스").englishNameOfPlatform("netflix").build();
 
     @BeforeEach
     void addAccount(){
@@ -53,24 +52,24 @@ class SettingsControllerTest {
         signUpForm.setEmail("jaeho@google.com");
         signUpForm.setPassword("12345678");
         accountService.processNewAccount(signUpForm);
-        zoneRepository.save(testZone);
+        platformRepository.save(testPlatform);
     }
 
     @AfterEach
     void afterEach(){
         accountRepository.deleteAll();
-        zoneRepository.deleteAll();
+        platformRepository.deleteAll();
     }
 
     @WithUserDetails(value = "jaeho", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @DisplayName("계정의 지역 정보 수정 폼")
+    @DisplayName("계정의 플랫폼 정보 수정 폼")
     @Test
-    void updateZonesForm() throws Exception {
-        mockMvc.perform(get(ROOT + SETTINGS + ZONES))
-                .andExpect(view().name(SETTINGS + ZONES))
+    void updatePlatformsForm() throws Exception {
+        mockMvc.perform(get(ROOT + SETTINGS + PLATFORMS))
+                .andExpect(view().name(SETTINGS + PLATFORMS))
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("whitelist"))
-                .andExpect(model().attributeExists("zones"));
+                .andExpect(model().attributeExists("platforms"));
     }
 
     @WithUserDetails(value = "jaeho", setupBefore = TestExecutionEvent.TEST_EXECUTION)

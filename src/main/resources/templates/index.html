@@ -5,10 +5,10 @@
     <div th:replace="fragments.html :: main-nav"></div>
     <section class="jumbotron text-center">
         <div class="container">
-            <h1>스터디올래</h1>
+            <h1>파티올래</h1>
             <p class="lead text-muted">
-                태그와 지역 기반으로 스터디를 찾고 참여하세요.<br/>
-                스터디 모임 관리 기능을 제공합니다.
+                태그와 플랫폼 기반으로 파티를 찾고 참여하세요.<br/>
+                파티 모임 관리 기능을 제공합니다.
             </p>
             <p>
                 <a th:href="@{/sign-up}" class="btn btn-primary my-2">회원 가입</a>
@@ -17,7 +17,7 @@
     </section>
     <div class="container">
         <div class="row justify-content-center pt-3">
-            <div th:replace="fragments.html :: study-list (studyList=${studyList})"></div>
+            <div th:replace="fragments.html :: party-list (partyList=${partyList})"></div>
         </div>
     </div>
     <div th:replace="fragments.html :: footer"></div>

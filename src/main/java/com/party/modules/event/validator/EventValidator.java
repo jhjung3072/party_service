@@ -20,6 +20,10 @@ public class EventValidator implements Validator {
     public void validate(Object target, Errors errors) {
         EventForm eventForm = (EventForm)target;
 
+        if (isNotValidStartDateTime(eventForm)) {
+            errors.rejectValue("startDateTime", "wrong.datetime", "모임 시작 일시를 정확히 입력하세요.");
+        }
+
         if (isNotValidEndEnrollmentDateTime(eventForm)) {
             errors.rejectValue("endEnrollmentDateTime", "wrong.datetime", "모임 접수 종료 일시를 정확히 입력하세요.");
         }
@@ -28,9 +32,6 @@ public class EventValidator implements Validator {
             errors.rejectValue("endDateTime", "wrong.datetime", "모임 종료 일시를 정확히 입력하세요.");
         }
 
-        if (isNotValidStartDateTime(eventForm)) {
-            errors.rejectValue("startDateTime", "wrong.datetime", "모임 시작 일시를 정확히 입력하세요.");
-        }
     }
 
     // 모임 시작 날짜
@@ -48,14 +49,14 @@ public class EventValidator implements Validator {
     // 모임 종료 날짜
     private boolean isNotValidEndDateTime(EventForm eventForm) {
         LocalDateTime endDateTime = eventForm.getEndDateTime();
-        // 모임 종료 날짜가 모임 시작 날짜보다 전이거나 모임 종료 날짜가 모임 모집 종료날짜보다 이전일 경우 Not valid
+        // 모임 종료 날짜가 모임 시작 날짜보다 이전이거나 모임 모집 종료날짜보다 이전일 경우 Not valid
         return endDateTime.isBefore(eventForm.getStartDateTime()) || endDateTime.isBefore(eventForm.getEndEnrollmentDateTime());
     }
 
 
     // 모임 수정 폼에서 모집인원 수정 검사
     public void validateUpdateForm(EventForm eventForm, Event event, Errors errors) {
-        // 제한 인원보다 승인된 참가신청이 많다면 not valid
+        // 모집 인원보다 승인된 참가신청이 많다면 not valid
         if (eventForm.getLimitOfEnrollments() < event.getNumberOfAcceptedEnrollments()) {
             errors.rejectValue("limitOfEnrollments", "wrong.value", "승인된 참가 신청보다 모집 인원 수가 커야 합니다.");
         }

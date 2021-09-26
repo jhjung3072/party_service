@@ -2,7 +2,7 @@ package com.party.modules.event;
 
 import com.party.modules.account.Account;
 import com.party.modules.account.UserAccount;
-import com.party.modules.study.Study;
+import com.party.modules.party.Party;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +26,7 @@ public class Event {
     private Long id;
 
     @ManyToOne
-    private Study study;
+    private Party party;
 
     @ManyToOne
     private Account createdBy;

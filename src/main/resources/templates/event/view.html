@@ -5,13 +5,13 @@
 <head th:replace="fragments.html :: head"></head>
 <body>
     <nav th:replace="fragments.html :: main-nav"></nav>
-    <div th:replace="fragments.html :: study-banner"></div>
+    <div th:replace="fragments.html :: party-banner"></div>
     <div class="container">
         <div class="row py-4 text-left justify-content-center bg-light">
             <div class="col-6">
                 <span class="h2">
-                <a href="#" class="text-decoration-none" th:href="@{'/study/' + ${study.path}}">
-                    <span th:text="${study.title}">스터디 이름</span>
+                <a href="#" class="text-decoration-none" th:href="@{'/party/' + ${party.path}}">
+                    <span th:text="${party.title}">파티 이름</span>
                 </a> / </span>
                 <span class="h2" th:text="${event.title}"></span>
             </div>
@@ -46,7 +46,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                            <form th:action="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/disenroll'}" method="post">
+                            <form th:action="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/disenroll'}" method="post">
                                 <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
                             </form>
                         </div>
@@ -69,7 +69,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                            <form th:action="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enroll'}" method="post">
+                            <form th:action="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/enroll'}" method="post">
                                 <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
                             </form>
                         </div>
@@ -91,10 +91,10 @@
                                 <th scope="col">참석자</th>
                                 <th scope="col">참가 신청 일시</th>
                                 <th scope="col">참가 상태</th>
-                                <th th:if="${study.isManager(#authentication.principal)}" scope="col">
+                                <th th:if="${party.isManager(#authentication.principal)}" scope="col">
                                     참가 신청 관리
                                 </th>
-                                <th th:if="${study.isManager(#authentication.principal)}" scope="col">
+                                <th th:if="${party.isManager(#authentication.principal)}" scope="col">
                                     출석 체크
                                 </th>
                             </tr>
@@ -119,17 +119,17 @@
                                     <span th:if="${enroll.accepted}">확정</span>
                                     <span th:if="${!enroll.accepted}">대기중</span>
                                 </td>
-                                <td th:if="${study.isManager(#authentication.principal)}">
+                                <td th:if="${party.isManager(#authentication.principal)}">
                                     <a th:if="${event.canAccept(enroll)}" href="#" class="text-decoration-none"
-                                       th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/accept'}" >신청 수락</a>
+                                       th:href="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/accept'}" >신청 수락</a>
                                     <a th:if="${event.canReject(enroll)}" href="#" class="text-decoration-none"
-                                       th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/reject'}">취소</a>
+                                       th:href="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/reject'}">취소</a>
                                 </td>
-                                <td th:if="${study.isManager(#authentication.principal)}">
+                                <td th:if="${party.isManager(#authentication.principal)}">
                                     <a th:if="${enroll.accepted && !enroll.attended}" href="#" class="text-decoration-none"
-                                       th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin'}">체크인</a>
+                                       th:href="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin'}">체크인</a>
                                     <a th:if="${enroll.accepted && enroll.attended}" href="#" class="text-decoration-none"
-                                       th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/cancel-checkin'}">체크인 취소</a>
+                                       th:href="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/cancel-checkin'}">체크인 취소</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -174,10 +174,10 @@
                     </a>
                 </dd>
 
-                <dt th:if="${study.isManager(#authentication.principal)}" class="font-weight-light">모임 관리</dt>
-                <dd th:if="${study.isManager(#authentication.principal)}">
+                <dt th:if="${party.isManager(#authentication.principal)}" class="font-weight-light">모임 관리</dt>
+                <dd th:if="${party.isManager(#authentication.principal)}">
                     <a class="btn btn-outline-primary btn-sm my-1"
-                       th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/edit'}" >
+                       th:href="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/edit'}" >
                         모임 수정
                     </a> <br/>
                     <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel">
@@ -201,7 +201,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                            <form th:action="@{'/study/' + ${study.path} + '/events/' + ${event.id}}" th:method="delete">
+                            <form th:action="@{'/party/' + ${party.path} + '/events/' + ${event.id}}" th:method="delete">
                                 <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
                             </form>
                         </div>

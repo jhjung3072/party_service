@@ -7,14 +7,14 @@ import com.party.modules.account.form.Notifications;
 import com.party.modules.account.form.PasswordForm;
 import com.party.modules.account.form.Profile;
 import com.party.modules.tag.Tag;
-import com.party.modules.zone.Zone;
+import com.party.modules.platform.Platform;
 import com.party.modules.account.validator.NicknameValidator;
 import com.party.modules.account.validator.PasswordFormValidator;
 import com.party.modules.tag.TagForm;
 import com.party.modules.tag.TagRepository;
 import com.party.modules.tag.TagService;
-import com.party.modules.zone.ZoneForm;
-import com.party.modules.zone.ZoneRepository;
+import com.party.modules.platform.PlatformForm;
+import com.party.modules.platform.PlatformRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +30,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.party.modules.account.SettingsController.ROOT;
-import static com.party.modules.account.SettingsController.SETTINGS;
-
 @Controller
 @RequestMapping(SettingsController.ROOT + SettingsController.SETTINGS)
 @RequiredArgsConstructor
@@ -45,37 +42,38 @@ public class SettingsController {
     static final String NOTIFICATIONS = "/notifications";
     static final String ACCOUNT = "/account";
     static final String TAGS = "/tags";
-    static final String ZONES = "/zones";
+    static final String PLATFORMS = "/platforms";
 
     private final AccountService accountService;
     private final ModelMapper modelMapper;
     private final NicknameValidator nicknameValidator;
+    private final PasswordFormValidator passwordFormValidator;
     private final TagService tagService;
     private final TagRepository tagRepository;
-    private final ZoneRepository zoneRepository;
+    private final PlatformRepository platformRepository;
     private final ObjectMapper objectMapper;
 
-    // 패스워드 폼 검증
+    // passwordForm 을 받을때 검증
     @InitBinder("passwordForm")
     public void passwordFormInitBinder(WebDataBinder webDataBinder) {
-        webDataBinder.addValidators(new PasswordFormValidator());
+        webDataBinder.addValidators(passwordFormValidator);
     }
 
-    // 닉네임 폼 검증
+    // nicknameForm 을 받을때 검증
     @InitBinder("nicknameForm")
     public void nicknameFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(nicknameValidator);
     }
 
-    // 프로필 수정 폼 뷰
+    // 프로필 수정 Get
     @GetMapping(PROFILE)
     public String updateProfileForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(modelMapper.map(account, Profile.class)); // account의 필드를 profile의 해당 필드로 매핑
+        model.addAttribute(modelMapper.map(account, Profile.class));
         return SETTINGS + PROFILE;
     }
 
-     // 프로필 수정 post
+     // 프로필 수정 Post
     @PostMapping(PROFILE)
     public String updateProfile(@CurrentAccount Account account, @Valid Profile profile, Errors errors,
                                 Model model, RedirectAttributes attributes) {
@@ -89,7 +87,7 @@ public class SettingsController {
         return "redirect:/" + SETTINGS + PROFILE;
     }
 
-    // 패스워드 수정 폼 뷰
+    // 패스워드 수정 폼 Get
     @GetMapping(PASSWORD)
     public String updatePasswordForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
@@ -111,7 +109,7 @@ public class SettingsController {
         return "redirect:/" + SETTINGS + PASSWORD;
     }
 
-    // 알림 수정 폼 뷰
+    // 알림 수정 Get
     @GetMapping(NOTIFICATIONS)
     public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
@@ -133,12 +131,12 @@ public class SettingsController {
         return "redirect:/" + SETTINGS + NOTIFICATIONS;
     }
 
-    // 태그 수정 폼
+    // 태그 수정 Get
     @GetMapping(TAGS)
     public String updateTags(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
 
-        //해당 account가 갖고 있는 tag.getTitle 을 문자열로
+        //해당 account가 갖고 있는 tag.getTitle 리스트
         Set<Tag> tags = accountService.getTags(account);
         model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
         //tagRepository의 모든 tags를 문자열로
@@ -172,49 +170,49 @@ public class SettingsController {
         return ResponseEntity.ok().build();
     }
 
-    // 지역 수정 폼 뷰
-    @GetMapping(ZONES)
-    public String updateZonesForm(@CurrentAccount Account account, Model model) throws JsonProcessingException {
+    // 플랫폼 수정 Get
+    @GetMapping(PLATFORMS)
+    public String updatePlatformsForm(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
 
-        //해당 account가 갖고 있는 zone 을 문자열로
-        Set<Zone> zones = accountService.getZones(account);
-        model.addAttribute("zones", zones.stream().map(Zone::toString).collect(Collectors.toList()));
-        //zoneRepository의 모든 zones를 문자열로
-        List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
-        // allZones 를 Json 형식의 String 으로 변환
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allZones));
+        //해당 account가 갖고 있는 platform 을 문자열로
+        Set<Platform> platforms = accountService.getPlatforms(account);
+        model.addAttribute("platforms", platforms.stream().map(Platform::toString).collect(Collectors.toList()));
+        //platformRepository의 모든 platforms를 문자열로
+        List<String> allPlatforms = platformRepository.findAll().stream().map(Platform::toString).collect(Collectors.toList());
+        // allPlatforms 를 Json 형식의 String 으로 변환
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allPlatforms));
 
-        return SETTINGS + ZONES;
+        return SETTINGS + PLATFORMS;
     }
 
-    // 지역 추가 Post
-    @PostMapping(ZONES + "/add")
+    // 플랫폼 추가 Post
+    @PostMapping(PLATFORMS + "/add")
     @ResponseBody
-    public ResponseEntity addZone(@CurrentAccount Account account, @RequestBody ZoneForm zoneForm) {
-        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
-        if (zone == null) {
+    public ResponseEntity addPlatform(@CurrentAccount Account account, @RequestBody PlatformForm platformForm) {
+        Platform platform = platformRepository.findByKoreanNameOfPlatformAndEnglishNameOfPlatform(platformForm.getKoreanNameOfPlatform(), platformForm.getEnglishNameOfPlatform());
+        if (platform == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        accountService.addZone(account, zone);
+        accountService.addPlatform(account, platform);
         return ResponseEntity.ok().build();
     }
 
-    // 지역 삭제 Post
-    @PostMapping(ZONES + "/remove")
+    // 플랫폼 삭제 Post
+    @PostMapping(PLATFORMS + "/remove")
     @ResponseBody
-    public ResponseEntity removeZone(@CurrentAccount Account account, @RequestBody ZoneForm zoneForm) {
-        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
-        if (zone == null) {
+    public ResponseEntity removePlatform(@CurrentAccount Account account, @RequestBody PlatformForm platformForm) {
+        Platform platform = platformRepository.findByKoreanNameOfPlatformAndEnglishNameOfPlatform(platformForm.getKoreanNameOfPlatform(), platformForm.getEnglishNameOfPlatform());
+        if (platform == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        accountService.removeZone(account, zone);
+        accountService.removePlatform(account, platform);
         return ResponseEntity.ok().build();
     }
 
-    // 닉네임 수정 폼 뷰
+    // 닉네임 수정 Get
     @GetMapping(ACCOUNT)
     public String updateAccountForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);

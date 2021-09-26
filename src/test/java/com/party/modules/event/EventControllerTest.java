@@ -4,8 +4,8 @@ import com.party.modules.account.Account;
 import com.party.modules.account.AccountRepository;
 import com.party.modules.account.AccountService;
 import com.party.modules.account.form.SignUpForm;
-import com.party.modules.study.Study;
-import com.party.modules.study.StudyService;
+import com.party.modules.party.Party;
+import com.party.modules.party.PartyService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +38,7 @@ class EventControllerTest  {
     @Autowired EnrollmentRepository enrollmentRepository;
     @Autowired AccountRepository accountRepository;
     @Autowired
-    StudyService studyService;
+    PartyService partyService;
     @Autowired AccountService accountService;
 
     @BeforeEach
@@ -61,13 +61,13 @@ class EventControllerTest  {
     @WithUserDetails(value = "jaeho", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void newEnrollment_to_FCFS_event_accepted() throws Exception {
         Account nana = createAccount("nana");
-        Study study = createStudy("test-study", nana);
-        Event event = createEvent("test-event", EventType.FCFS, 2, study, nana);
+        Party party = createParty("test-party", nana);
+        Event event = createEvent("test-event", EventType.FCFS, 2, party, nana);
 
-        mockMvc.perform(post("/study/" + study.getPath() + "/events/" + event.getId() + "/enroll")
+        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/enroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/study/" + study.getPath() + "/events/" + event.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + event.getId()));
 
         Account jaeho = accountRepository.findByNickname("jaeho");
         isAccepted(jaeho, event);
@@ -78,18 +78,18 @@ class EventControllerTest  {
     @WithUserDetails(value = "jaeho", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void newEnrollment_to_FCFS_event_not_accepted() throws Exception {
         Account nana = createAccount("nana");
-        Study study = createStudy("test-study", nana);
-        Event event = createEvent("test-event", EventType.FCFS, 2, study, nana);
+        Party party = createParty("test-party", nana);
+        Event event = createEvent("test-event", EventType.FCFS, 2, party, nana);
 
         Account may = createAccount("may");
         Account june = createAccount("june");
         eventService.newEnrollment(event, may);
         eventService.newEnrollment(event, june);
 
-        mockMvc.perform(post("/study/" + study.getPath() + "/events/" + event.getId() + "/enroll")
+        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/enroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/study/" + study.getPath() + "/events/" + event.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + event.getId()));
 
         Account jaeho = accountRepository.findByNickname("jaeho");
         isNotAccepted(jaeho, event);
@@ -102,8 +102,8 @@ class EventControllerTest  {
         Account jaeho = accountRepository.findByNickname("jaeho");
         Account nana = createAccount("nana");
         Account may = createAccount("may");
-        Study study = createStudy("test-study", nana);
-        Event event = createEvent("test-event", EventType.FCFS, 2, study, nana);
+        Party party = createParty("test-party", nana);
+        Event event = createEvent("test-event", EventType.FCFS, 2, party, nana);
 
         eventService.newEnrollment(event, may);
         eventService.newEnrollment(event, jaeho);
@@ -113,10 +113,10 @@ class EventControllerTest  {
         isAccepted(jaeho, event);
         isNotAccepted(nana, event);
 
-        mockMvc.perform(post("/study/" + study.getPath() + "/events/" + event.getId() + "/disenroll")
+        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/disenroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/study/" + study.getPath() + "/events/" + event.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + event.getId()));
 
         isAccepted(may, event);
         isAccepted(nana, event);
@@ -130,8 +130,8 @@ class EventControllerTest  {
         Account jaeho = accountRepository.findByNickname("jaeho");
         Account nana = createAccount("nana");
         Account may = createAccount("may");
-        Study study = createStudy("test-study", nana);
-        Event event = createEvent("test-event", EventType.FCFS, 2, study, nana);
+        Party party = createParty("test-party", nana);
+        Event event = createEvent("test-event", EventType.FCFS, 2, party, nana);
 
         eventService.newEnrollment(event, may);
         eventService.newEnrollment(event, nana);
@@ -141,10 +141,10 @@ class EventControllerTest  {
         isAccepted(nana, event);
         isNotAccepted(jaeho, event);
 
-        mockMvc.perform(post("/study/" + study.getPath() + "/events/" + event.getId() + "/disenroll")
+        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/disenroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/study/" + study.getPath() + "/events/" + event.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + event.getId()));
 
         isAccepted(may, event);
         isAccepted(nana, event);
@@ -164,19 +164,19 @@ class EventControllerTest  {
     @WithUserDetails(value = "jaeho", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void newEnrollment_to_CONFIMATIVE_event_not_accepted() throws Exception {
         Account nana = createAccount("nana");
-        Study study = createStudy("test-study", nana);
-        Event event = createEvent("test-event", EventType.CONFIRMATIVE, 2, study, nana);
+        Party party = createParty("test-party", nana);
+        Event event = createEvent("test-event", EventType.CONFIRMATIVE, 2, party, nana);
 
-        mockMvc.perform(post("/study/" + study.getPath() + "/events/" + event.getId() + "/enroll")
+        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/enroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/study/" + study.getPath() + "/events/" + event.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + event.getId()));
 
         Account jaeho = accountRepository.findByNickname("jaeho");
         isNotAccepted(jaeho, event);
     }
 
-    private Event createEvent(String eventTitle, EventType eventType, int limit, Study study, Account account) {
+    private Event createEvent(String eventTitle, EventType eventType, int limit, Party party, Account account) {
         Event event = new Event();
         event.setEventType(eventType);
         event.setLimitOfEnrollments(limit);
@@ -185,13 +185,13 @@ class EventControllerTest  {
         event.setEndEnrollmentDateTime(LocalDateTime.now().plusDays(1));
         event.setStartDateTime(LocalDateTime.now().plusDays(1).plusHours(5));
         event.setEndDateTime(LocalDateTime.now().plusDays(1).plusHours(7));
-        return eventService.createEvent(event, study, account);
+        return eventService.createEvent(event, party, account);
     }
-    protected Study createStudy(String path, Account manager){
-        Study study= new Study();
-        study.setPath(path);
-        studyService.createNewStudy(study,manager);
-        return study;
+    protected Party createParty(String path, Account manager){
+        Party party = new Party();
+        party.setPath(path);
+        partyService.createNewParty(party,manager);
+        return party;
     }
     protected Account createAccount(String nickname){
         Account account=new Account();

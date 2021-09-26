@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<body>
+    <nav th:replace="fragments.html :: main-nav"></nav>
+    <div th:replace="fragments.html :: party-banner"></div>
+    <div class="container">
+        <div th:replace="fragments.html :: party-info"></div>
+        <div th:replace="fragments.html :: party-menu(partyMenu='settings')"></div>
+        <div class="row mt-3 justify-content-center">
+            <div class="col-2">
+                <div th:replace="fragments.html :: party-settings-menu(currentMenu='platforms')"></div>
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <h2 class="col-sm-12">주요 활동 플랫폼</h2>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="alert alert-info" role="alert">
+                            주로 파티를 하는 플랫폼을 등록하세요.<br/>
+                            시스템에 등록된 플랫폼만 선택할 수 있습니다.
+                        </div>
+                        <div id="whitelist" th:text="${whitelist}" hidden></div>
+                        <input id="platforms" type="text" name="platforms" th:value="${#strings.listJoin(platforms, ',')}"
+                               class="tagify-outside">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="fragments.html :: footer"></div>
+    </div>
+    <script th:replace="fragments.html :: ajax-csrf-header"></script>
+    <script th:replace="fragments.html :: update-platforms(baseUrl='/party/' + ${party.path} + '/settings/platforms')"></script>
+</body>
+</html>

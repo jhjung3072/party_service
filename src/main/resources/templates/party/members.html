@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+    <div th:replace="fragments.html :: main-nav"></div>
+    <div th:replace="fragments.html :: party-banner"></div>
+    <div class="container">
+        <div th:replace="fragments.html :: party-info"></div>
+        <div th:replace="fragments.html :: party-menu(partyMenu='members')"></div>
+
+        <div th:replace="fragments.html :: member-list(members=${party.managers},isManager=${true})"></div>
+        <div th:replace="fragments.html :: member-list(members=${party.members},isManager=${false})"></div>
+
+        <div th:replace="fragments.html :: footer"></div>
+    </div>
+    <script th:replace="fragments.html :: tooltip"></script>
+</body>
+</html>

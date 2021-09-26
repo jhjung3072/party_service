@@ -14,7 +14,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
     Enrollment findByEventAndAccount(Event event, Account account);
 
-    // Enrollment 조회시 event, study 도 조회
-    @EntityGraph("Enrollment.withEventAndStudy")
+    // Enrollment 조회시 event, party 도 조회
+    @EntityGraph("Enrollment.withEventAndParty") //enrollment.event.party
     List<Enrollment> findByAccountAndAcceptedOrderByEnrolledAtDesc(Account account, boolean accepted);
 }

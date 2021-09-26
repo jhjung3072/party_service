@@ -10,11 +10,11 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @NamedEntityGraph(
-        name = "Enrollment.withEventAndStudy",
+        name = "Enrollment.withEventAndParty",
         attributeNodes = {
-                @NamedAttributeNode(value = "event", subgraph = "study")  // enrollment.event.study 조회
+                @NamedAttributeNode(value = "event", subgraph = "party")  // enrollment.event.party 조회
         },
-        subgraphs = @NamedSubgraph(name = "study", attributeNodes = @NamedAttributeNode("study")) //subgraph study 정의
+        subgraphs = @NamedSubgraph(name = "party", attributeNodes = @NamedAttributeNode("party")) //subgraph party 정의
 )
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
