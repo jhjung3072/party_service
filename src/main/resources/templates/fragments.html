@@ -653,8 +653,12 @@
                     </p>
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted">
-                            <i class="fa fa-user-circle"></i>
+                            <i class="fa fa-user-circle"></i>현재 인원
                             <span th:text="${party.memberCount}"></span>명
+                        </small>
+                        <small class="text-muted">
+                            <i class="fa fa-user-circle"></i>남은 인원
+                            <span th:text="${party.numberOfRemainSpots}"></span>명
                         </small>
                         <small class="text-muted date" th:text="${party.publishedDateTime}">9 mins</small>
                     </div>

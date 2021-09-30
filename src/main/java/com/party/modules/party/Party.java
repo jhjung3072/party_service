@@ -2,6 +2,7 @@ package com.party.modules.party;
 
 import com.party.modules.account.Account;
 import com.party.modules.account.UserAccount;
+import com.party.modules.event.Enrollment;
 import com.party.modules.event.EventType;
 import com.party.modules.platform.Platform;
 import com.party.modules.tag.Tag;
@@ -72,10 +73,8 @@ public class Party {
 
     private boolean useBanner;
 
-    private int memberCount;
+    private int memberCount=1;
 
-    @Enumerated(EnumType.STRING)
-    private EventType eventType;
 
     public void addManager(Account account) {
         this.managers.add(account);
@@ -168,6 +167,12 @@ public class Party {
     public void removeMember(Account account) {
         this.getMembers().remove(account);
         this.memberCount--;
+    }
+
+    // 모임에 몇자리 남았는지
+    public int numberOfRemainSpots() {
+        // 제한 모집인원 수 - 현재 승인된 모집 인원 수
+        return this.limitOfEnrollments - this.memberCount;
     }
 
     //party 경로가 한글이 쓰일 수 있으므로 URLEncoder 사용

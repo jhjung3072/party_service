@@ -31,11 +31,11 @@ public class PartyFormValidator implements Validator {
         }
 
         if (isNotValidStartDateTime(partyForm)) {
-            errors.rejectValue("startDateTime", "wrong.datetime", "모임 시작 일시를 정확히 입력하세요.");
+            errors.rejectValue("startDateTime", "wrong.datetime", "파티 시작 일시를 정확히 입력하세요.");
         }
 
         if (isNotValidEndDateTime(partyForm)) {
-            errors.rejectValue("endDateTime", "wrong.datetime", "모임 종료 일시를 정확히 입력하세요.");
+            errors.rejectValue("endDateTime", "wrong.datetime", "파티 종료 일시를 정확히 입력하세요.");
         }
     }
 
