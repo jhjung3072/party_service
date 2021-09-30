@@ -46,7 +46,7 @@ public class PartyEventListener {
         accounts.forEach(account -> {
             if (account.isPartyCreatedByEmail()) {
                 sendPartyCreatedEmail(party, account, "새로운 파티가 생겼습니다",
-                        "파티올래, '" + party.getTitle() + "' 파티가 생겼습니다.");
+                        "넷플프렌드, '" + party.getTitle() + "' 파티가 생겼습니다.");
             }
 
             if (account.isPartyCreatedByWeb()) {
@@ -66,7 +66,7 @@ public class PartyEventListener {
         accounts.forEach(account -> {
             if (account.isPartyUpdatedByEmail()) {
                 sendPartyCreatedEmail(party, account, partyUpdateEvent.getMessage(),
-                        "파티올래, '" + party.getTitle() + "' 파티에 새소식이 있습니다.");
+                        "넷플프렌드, '" + party.getTitle() + "' 파티에 새소식이 있습니다.");
             }
 
             if (account.isPartyUpdatedByWeb()) {

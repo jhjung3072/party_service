@@ -59,7 +59,7 @@ public class EnrollmentEventListener {
         String message = templateEngine.process("mail/simple-link", context);
 
         EmailMessage emailMessage = EmailMessage.builder()
-                .subject("파티올래, " + event.getTitle() + " 모임 참가 신청 결과입니다.")
+                .subject("넷플프렌드, " + event.getTitle() + " 모임 참가 신청 결과입니다.")
                 .to(account.getEmail())
                 .message(message)
                 .build();

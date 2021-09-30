@@ -11,6 +11,7 @@ import com.party.modules.account.form.Profile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -67,13 +68,13 @@ public class AccountService implements UserDetailsService {
                 "&email=" + newAccount.getEmail());
         context.setVariable("nickname", newAccount.getNickname());
         context.setVariable("linkName", "이메일 인증하기");
-        context.setVariable("message", "파티올래 서비스를 사용하려면 링크를 클릭하세요.");
+        context.setVariable("message", "넷플프렌드 서비스를 사용하려면 링크를 클릭하세요.");
         context.setVariable("host", appProperties.getHost());
         String message = templateEngine.process("mail/simple-link", context);
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(newAccount.getEmail())
-                .subject("파티올래, 회원 가입 인증")
+                .subject("넷플프렌드, 회원 가입 인증")
                 .message(message)
                 .build();
 
@@ -158,14 +159,14 @@ public class AccountService implements UserDetailsService {
         context.setVariable("link", "/login-by-email?token=" + account.getEmailCheckToken() +
                 "&email=" + account.getEmail());
         context.setVariable("nickname", account.getNickname());
-        context.setVariable("linkName", "파티올래 로그인하기");
+        context.setVariable("linkName", "넷플프렌드 로그인하기");
         context.setVariable("message", "로그인 하려면 아래 링크를 클릭하세요.");
         context.setVariable("host", appProperties.getHost());
         String message = templateEngine.process("mail/simple-link", context);
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(account.getEmail())
-                .subject("파티올래, 로그인 링크")
+                .subject("넷플프렌드, 로그인 링크")
                 .message(message)
                 .build();
         emailService.sendEmail(emailMessage);
