@@ -2,9 +2,12 @@ package com.party.modules.party.form;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
 
 @Data
 public class PartyForm {
@@ -17,6 +20,10 @@ public class PartyForm {
     private String path;
 
     @NotBlank
+    @Pattern(regexp = VALID_PATH_PATTERN)
+    private String kakaoLink;
+
+    @NotBlank
     @Length(max = 50)
     private String title;
 
@@ -26,5 +33,14 @@ public class PartyForm {
 
     @NotBlank
     private String fullDescription;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime startDateTime;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime endDateTime;
+
+    @Min(1)
+    private Integer limitOfEnrollments = 1;
 
 }

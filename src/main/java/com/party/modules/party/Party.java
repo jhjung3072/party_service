@@ -2,6 +2,7 @@ package com.party.modules.party;
 
 import com.party.modules.account.Account;
 import com.party.modules.account.UserAccount;
+import com.party.modules.event.EventType;
 import com.party.modules.platform.Platform;
 import com.party.modules.tag.Tag;
 import lombok.*;
@@ -30,6 +31,8 @@ public class Party {
     @Column(unique = true)
     private String path;
 
+    private String kakaoLink;
+
     private String title;
 
     private String shortDescription;
@@ -52,6 +55,15 @@ public class Party {
 
     private LocalDateTime recruitingUpdatedDateTime;
 
+    @Column(nullable = false)
+    private LocalDateTime startDateTime;
+
+    @Column(nullable = false)
+    private LocalDateTime endDateTime;
+
+    @Column
+    private Integer limitOfEnrollments;
+
     private boolean recruiting;
 
     private boolean published;
@@ -61,6 +73,9 @@ public class Party {
     private boolean useBanner;
 
     private int memberCount;
+
+    @Enumerated(EnumType.STRING)
+    private EventType eventType;
 
     public void addManager(Account account) {
         this.managers.add(account);

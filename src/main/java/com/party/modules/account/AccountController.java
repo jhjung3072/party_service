@@ -44,7 +44,7 @@ public class AccountController {
         return "redirect:/";
     }
 
-    // 이메일 토근 체크
+    // 이메일 토큰 체크
     @GetMapping("/check-email-token")
     public String checkEmailToken(String token, String email, Model model) {
         Account account = accountRepository.findByEmail(email);

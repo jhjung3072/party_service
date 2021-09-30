@@ -62,7 +62,7 @@ public class AccountService implements UserDetailsService {
 
     // 이메일 인증 전송
     public void sendSignUpConfirmEmail(Account newAccount) {
-        Context context = new Context(); //thymeleaf Context
+        Context context = new Context();
         context.setVariable("link", "/check-email-token?token=" + newAccount.getEmailCheckToken() +
                 "&email=" + newAccount.getEmail());
         context.setVariable("nickname", newAccount.getNickname());

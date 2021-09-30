@@ -174,7 +174,6 @@ public class PartySettingsController {
             return ResponseEntity.badRequest().build();
         }
 
-
         partyService.addPlatform(party, platform);
         return ResponseEntity.ok().build();
     }
@@ -186,7 +185,8 @@ public class PartySettingsController {
     public ResponseEntity removePlatform(@CurrentAccount Account account, @PathVariable String path,
                                      @RequestBody PlatformForm platformForm) {
         Party party = partyService.getPartyToUpdatePlatform(account, path);
-        Platform platform = platformRepository.findByKoreanNameOfPlatformAndEnglishNameOfPlatform(platformForm.getKoreanNameOfPlatform(), platformForm.getEnglishNameOfPlatform());
+        Platform platform = platformRepository.findByKoreanNameOfPlatformAndEnglishNameOfPlatform(platformForm.getKoreanNameOfPlatform(),
+                                 platformForm.getEnglishNameOfPlatform());
         if (platform == null) {
             return ResponseEntity.badRequest().build();
         }
