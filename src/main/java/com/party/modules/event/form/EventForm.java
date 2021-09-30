@@ -1,6 +1,5 @@
 package com.party.modules.event.form;
 
-import com.party.modules.event.EventType;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,22 +15,8 @@ public class EventForm {
     @Length(max = 50)
     private String title;
 
+    @NotBlank
+    @Length(max = 100)
     private String description;
-
-    private EventType eventType = EventType.FCFS;
-
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime endEnrollmentDateTime;
-
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime startDateTime;
-
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime endDateTime;
-
-    @Min(2)
-    private Integer limitOfEnrollments = 2;
-
-
 
 }

@@ -3,7 +3,6 @@ package com.party.modules.party;
 import com.party.modules.account.Account;
 import com.party.modules.account.UserAccount;
 import com.party.modules.event.Enrollment;
-import com.party.modules.event.EventType;
 import com.party.modules.platform.Platform;
 import com.party.modules.tag.Tag;
 import lombok.*;

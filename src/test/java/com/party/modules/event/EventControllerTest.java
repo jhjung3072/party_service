@@ -62,7 +62,7 @@ class EventControllerTest  {
     void newEnrollment_to_FCFS_event_accepted() throws Exception {
         Account nana = createAccount("nana");
         Party party = createParty("test-party", nana);
-        Event event = createEvent("test-event", EventType.FCFS, 2, party, nana);
+        Event event = createEvent("test-event", 2, party, nana);
 
         mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/enroll")
                         .with(csrf()))
@@ -79,12 +79,10 @@ class EventControllerTest  {
     void newEnrollment_to_FCFS_event_not_accepted() throws Exception {
         Account nana = createAccount("nana");
         Party party = createParty("test-party", nana);
-        Event event = createEvent("test-event", EventType.FCFS, 2, party, nana);
+        Event event = createEvent("test-event", 2, party, nana);
 
         Account may = createAccount("may");
         Account june = createAccount("june");
-        eventService.newEnrollment(event, may);
-        eventService.newEnrollment(event, june);
 
         mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/enroll")
                         .with(csrf()))
@@ -103,11 +101,8 @@ class EventControllerTest  {
         Account nana = createAccount("nana");
         Account may = createAccount("may");
         Party party = createParty("test-party", nana);
-        Event event = createEvent("test-event", EventType.FCFS, 2, party, nana);
+        Event event = createEvent("test-event", 2, party, nana);
 
-        eventService.newEnrollment(event, may);
-        eventService.newEnrollment(event, jaeho);
-        eventService.newEnrollment(event, nana);
 
         isAccepted(may, event);
         isAccepted(jaeho, event);
@@ -131,11 +126,9 @@ class EventControllerTest  {
         Account nana = createAccount("nana");
         Account may = createAccount("may");
         Party party = createParty("test-party", nana);
-        Event event = createEvent("test-event", EventType.FCFS, 2, party, nana);
+        Event event = createEvent("test-event", 2, party, nana);
 
-        eventService.newEnrollment(event, may);
-        eventService.newEnrollment(event, nana);
-        eventService.newEnrollment(event, jaeho);
+
 
         isAccepted(may, event);
         isAccepted(nana, event);
@@ -165,7 +158,7 @@ class EventControllerTest  {
     void newEnrollment_to_CONFIMATIVE_event_not_accepted() throws Exception {
         Account nana = createAccount("nana");
         Party party = createParty("test-party", nana);
-        Event event = createEvent("test-event", EventType.CONFIRMATIVE, 2, party, nana);
+        Event event = createEvent("test-event", 2, party, nana);
 
         mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/enroll")
                         .with(csrf()))
@@ -176,15 +169,10 @@ class EventControllerTest  {
         isNotAccepted(jaeho, event);
     }
 
-    private Event createEvent(String eventTitle, EventType eventType, int limit, Party party, Account account) {
+    private Event createEvent(String eventTitle, int limit, Party party, Account account) {
         Event event = new Event();
-        event.setEventType(eventType);
-        event.setLimitOfEnrollments(limit);
         event.setTitle(eventTitle);
-        event.setCreatedDateTime(LocalDateTime.now());
-        event.setEndEnrollmentDateTime(LocalDateTime.now().plusDays(1));
-        event.setStartDateTime(LocalDateTime.now().plusDays(1).plusHours(5));
-        event.setEndDateTime(LocalDateTime.now().plusDays(1).plusHours(7));
+
         return eventService.createEvent(event, party, account);
     }
     protected Party createParty(String path, Account manager){
