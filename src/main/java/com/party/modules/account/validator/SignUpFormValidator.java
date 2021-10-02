@@ -2,7 +2,6 @@ package com.party.modules.account.validator;
 
 import com.party.modules.account.AccountRepository;
 import com.party.modules.account.form.SignUpForm;
-import com.party.modules.event.EnrollmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

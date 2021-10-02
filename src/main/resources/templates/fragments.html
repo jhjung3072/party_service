@@ -180,16 +180,16 @@
     (function () {
         'use strict';
 
-        window.addEventListener('load', function () {
+        window.add넷플프렌즈Listener('load', function () {
             // Fetch all the forms we want to apply custom Bootstrap validation styles to
             var forms = document.getElementsByClassName('needs-validation');
 
-            // Loop over them and prevent submission
+            // Loop over them and pr넷플프렌즈 submission
             Array.prototype.filter.call(forms, function (form) {
-                form.addEventListener('submit', function (event) {
+                form.add넷플프렌즈Listener('submit', function (post) {
                     if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
+                        post.pr넷플프렌즈Default();
+                        post.stopPropagation();
                     }
                     form.classList.add('was-validated')
                 }, false)
@@ -223,15 +223,15 @@
                 <span th:if="${!party.published}"
                       class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom"
                       title="파티 공개 준비중">
-                    <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>DRAFT</button>
+                    <button class="btn btn-primary btn-sm" style="pointer-posts: none;" type="button" disabled>DRAFT</button>
                 </span>
             <span th:if="${party.closed}"
                   class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="파티 종료함">
-                    <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>CLOSED</button>
+                    <button class="btn btn-primary btn-sm" style="pointer-posts: none;" type="button" disabled>CLOSED</button>
                 </span>
             <span th:if="${!party.recruiting}"
                   class="d-inline-block ml-1" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="팀원 모집중 아님">
-                    <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>OFF</button>
+                    <button class="btn btn-primary btn-sm" style="pointer-posts: none;" type="button" disabled>OFF</button>
                 </span>
             <span sec:authorize="isAuthenticated()" th:if="${party.isJoinable(#authentication.principal)}"
                   class="btn-group" role="group" aria-label="Basic example">
@@ -239,20 +239,20 @@
                         파티 가입
                     </a>
                     <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/members'}"
-                       th:text="${party.members.size()}">1</a>
+                       th:text="${party.memberCount}"></a>
                 </span>
             <span sec:authorize="isAuthenticated()"
-                  th:if="${!party.closed && party.isMember(#authentication.principal)}" class="btn-group" role="group">
+                  th:if="${!party.closed && party.isMember(#authentication.principal) && party.isRecruiting}" class="btn-group" role="group">
                     <a class="btn btn-outline-warning" th:href="@{'/party/' + ${party.path} + '/leave'}">
                         파티 탈퇴
                     </a>
                     <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/members'}"
-                       th:text="${party.members.size()}">1</a>
+                       th:text="${party.memberCount}"></a>
                 </span>
             <span sec:authorize="isAuthenticated()"
                   th:if="${party.published && !party.closed && party.isManager(#authentication.principal)}">
-                    <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/new-event'}">
-                        <i class="fa fa-plus"></i> 모임 만들기
+                    <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/new-post'}">
+                        <i class="fa fa-plus"></i> 작품 추천
                     </a>
                 </span>
         </div>
@@ -287,10 +287,15 @@
             <i class="fa fa-info-circle"></i> 소개
         </a>
         <a class="nav-item nav-link" href="#" th:classappend="${partyMenu == 'members'}? active" th:href="@{'/party/' + ${party.path} + '/members'}">
-            <i class="fa fa-user"></i> 멤버
+            <i class="fa fa-address-book"></i> 멤버
         </a>
-        <a class="nav-item nav-link" th:classappend="${partyMenu == 'events'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/events'}">
-            <i class="fa fa-calendar"></i> 추천 게시판
+        <a  sec:authorize="isAuthenticated()" th:if="${party.isManager(#authentication.principal) || (party.isMember(#authentication.principal) && party.isRecruiting==false)}"
+            class="nav-item nav-link" th:classappend="${partyMenu == 'kakao-link'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/kakaoLink'}">
+            <i class="fa fa-link"></i> 오픈채팅방 링크
+        </a>
+        <a  sec:authorize="isAuthenticated()" th:if="${party.isManager(#authentication.principal) || (party.isMember(#authentication.principal) && party.isRecruiting==false)}"
+                class="nav-item nav-link" th:classappend="${partyMenu == 'posts'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/posts'}">
+            <i class="fa fa-film"></i> 작품 추천 By 파티장
         </a>
         <a sec:authorize="isAuthenticated()" th:if="${party.isManager(#authentication.principal)}"
            class="nav-item nav-link" th:classappend="${partyMenu == 'settings'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/description'}">
@@ -305,7 +310,7 @@
             <svg th:if="${#strings.isEmpty(member?.profileImage)}" th:data-jdenticon-value="${member.nickname}" width="64" height="64" class="rounded border bg-light mr-3"></svg>
             <img th:if="${!#strings.isEmpty(member?.profileImage)}" th:src="${member?.profileImage}" width="64" height="64" class="rounded border mr-3"/>
             <div class="media-body">
-                <h5 class="mt-0 mb-1"><span th:text="${member.nickname}"></span> <span th:if="${isManager}" class="badge badge-primary">관리자</span></h5>
+                <h5 class="mt-0 mb-1"><span th:text="${member.nickname}"></span> <span th:if="${isManager}" class="badge badge-primary">파티장</span></h5>
                 <span th:text="${member.bio}"></span>
             </div>
         </li>
@@ -331,7 +336,7 @@
         $(function () {
             $('.editor').summernote({
                 fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
-                placeholder: '파티의 목표, 일정, 진행 방식, 사용할 교재 또는 인터넷 강좌 그리고 모집중인 파티원 등 파티에 대해 자세히 적어 주세요.',
+                placeholder: '추천 작품을 설명해주세요!',
                 tabsize: 2,
                 height: 300
             });
@@ -524,18 +529,18 @@
 </div>
 
 
-<div th:fragment="event-form (mode, action)">
+<div th:fragment="post-form (mode, action)">
     <div class="py-5 text-center">
         <h2>
             <a th:href="@{'/party/' + ${party.path}}"><span th:text="${party.title}">파티</span></a> /
-            <span th:if="${mode == 'edit'}" th:text="${event.title}"></span>
+            <span th:if="${mode == 'edit'}" th:text="${post.title}"></span>
             <span th:if="${mode == 'new'}">추천 작품 공유하기</span>
         </h2>
     </div>
     <div class="row justify-content-center">
         <form class="needs-validation col-sm-10"
               th:action="@{${action}}"
-              th:object="${eventForm}" method="post" novalidate>
+              th:object="${postForm}" method="post" novalidate>
             <div class="form-group">
                 <label for="title">제목</label>
                 <input id="title" type="text" th:field="*{title}" class="form-control"
@@ -558,7 +563,7 @@
             </div>
             <div class="form-group">
                 <button class="btn btn-primary btn-block" type="submit"
-                        aria-describedby="submitHelp" th:text="${mode == 'edit' ? '모임 수정' : '모임 만들기'}">모임 수정</button>
+                        aria-describedby="submitHelp" th:text="${mode == 'edit' ? '수정' : '글쓰기'}"></button>
             </div>
         </form>
     </div>
@@ -593,17 +598,17 @@
                                 </span>
                         <span th:each="platform: ${party.platforms}" class="font-weight-light text-monospace badge badge-primary mr-3">
                                     <a th:href="@{'/search/platform/' + ${platform.id}}" class="text-decoration-none text-white">
-                                        <i class="fa fa-globe"></i> <span th:text="${platform.koreanNameOfPlatform}" class="text-white">City</span>
+                                        <i class="fa fa-globe"></i> <span th:text="${platform.koreanNameOfPlatform}" class="text-white"></span>
                                     </a>
                                 </span>
                     </p>
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted">
-                            <i class="fa fa-user-circle"></i>현재 인원
+                            <i class="fa fa-user-circle"></i> 현재 인원
                             <span th:text="${party.memberCount}"></span>명
                         </small>
                         <small class="text-muted">
-                            <i class="fa fa-user-circle"></i>남은 인원
+                            <i class="fa fa-user-circle"></i> 남은 인원
                             <span th:text="${party.numberOfRemainSpots}"></span>명
                         </small>
                         <small class="text-muted date" th:text="${party.publishedDateTime}">9 mins</small>

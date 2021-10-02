@@ -1,4 +1,4 @@
-package com.party.modules.event;
+package com.party.modules.post;
 
 import com.party.modules.account.Account;
 import com.party.modules.account.UserAccount;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
-public class Event {
+public class Post {
 
     @Id @GeneratedValue
     private Long id;

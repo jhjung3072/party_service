@@ -3,7 +3,6 @@ package com.party.modules.main;
 import com.party.modules.account.AccountRepository;
 import com.party.modules.account.CurrentAccount;
 import com.party.modules.account.Account;
-import com.party.modules.event.EnrollmentRepository;
 import com.party.modules.party.Party;
 import com.party.modules.party.PartyRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
 
     private final PartyRepository partyRepository;
-    private final EnrollmentRepository enrollmentRepository;
     private final AccountRepository accountRepository;
 
     @GetMapping("/")
@@ -28,8 +26,7 @@ public class MainController {
         if (account != null) {
             Account accountLoaded = accountRepository.findAccountWithTagsAndPlatformsById(account.getId());
             model.addAttribute(accountLoaded);
-            // 모임 리스트
-            model.addAttribute("enrollmentList", enrollmentRepository.findByAccountAndAcceptedOrderByEnrolledAtDesc(accountLoaded, true));
+
             //account가 갖고 있는 tags 와 platforms 에 대한 party 리스트
             model.addAttribute("partyList", partyRepository.findByAccount(
                     accountLoaded.getTags(),

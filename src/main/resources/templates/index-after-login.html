@@ -21,7 +21,7 @@
                 <h5 class="mt-3 font-weight-light">주요 활동 플랫폼</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item" th:each="platform: ${account.platforms}">
-                        <i class="fa fa-globe"></i> <span th:text="${platform.getEnglishNameOfPlatform()}">Platform</span>
+                        <i class="fa fa-globe"></i> <span th:text="${platform.getKoreanNameOfPlatform()}">Platform</span>
                     </li>
                     <li class="list-group-item" th:if="${account.platforms.size() == 0}">
                         <a th:href="@{/settings/platforms}" class="btn-text">주요 활동 플랫폼</a>을 등록하세요.
@@ -29,26 +29,6 @@
                 </ul>
             </div>
             <div class="col-md-7">
-                <h5 th:if="${#lists.isEmpty(enrollmentList)}" class="font-weight-light">참석할 모임이 없습니다.</h5>
-                <h5 th:if="${!#lists.isEmpty(enrollmentList)}" class="font-weight-light">참석할 모임</h5>
-                <div class="row row-cols-1 row-cols-md-2" th:if="${!#lists.isEmpty(enrollmentList)}">
-                    <div class="col mb-4" th:each="enrollment: ${enrollmentList}">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title" th:text="${enrollment.event.title}">Event title</h5>
-                                <h6 class="card-subtitle mb-2 text-muted" th:text="${enrollment.event.party.title}">Party title</h6>
-                                <p class="card-text">
-                                <span>
-                                    <i class="fa fa-calendar-o"></i>
-                                    <span class="calendar" th:text="${enrollment.event.startDateTime}">Last updated 3 mins ago</span>
-                                </span>
-                                </p>
-                                <a th:href="@{'/party/' + ${enrollment.event.party.path} + '/events/' + ${enrollment.event.id}}" class="card-link">모임 조회</a>
-                                <a th:href="@{'/party/' + ${enrollment.event.party.path}}" class="card-link">파티 조회</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <h5 class="font-weight-light mt-3" th:if="${#lists.isEmpty(partyList)}">관련 파티가 없습니다.</h5>
                 <h5 class="font-weight-light mt-3" th:if="${!#lists.isEmpty(partyList)}">주요 활동 플랫폼의 관심 주제 파티</h5>
                 <div class="row justify-content-center">

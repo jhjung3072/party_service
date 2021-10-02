@@ -73,6 +73,15 @@ public class PartyController {
         return "party/members";
     }
 
+    // 카카오 오픈채팅방 링크
+    @GetMapping("/party/{path}/kakaoLink")
+    public String viewKakaoLink(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Party party = partyService.getParty(path);
+        model.addAttribute(account);
+        model.addAttribute(party);
+        return "party/kakao-link";
+    }
+
     // 파티 참가 Post
     @GetMapping("/party/{path}/join")
     public String joinParty(@CurrentAccount Account account, @PathVariable String path) {

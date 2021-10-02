@@ -5,7 +5,7 @@
 <nav th:replace="fragments.html :: main-nav"></nav>
 <div th:replace="fragments.html :: party-banner"></div>
 <div class="container">
-    <div th:replace="fragments.html :: event-form (mode='new', action='/party/' + ${party.path} + '/new-event/')"></div>
+    <div th:replace="fragments.html :: post-form (mode='new', action='/party/' + ${party.path} + '/new-post/')"></div>
     <div th:replace="fragments.html :: footer"></div>
 </div>
 <script th:replace="fragments.html :: form-validation"></script>

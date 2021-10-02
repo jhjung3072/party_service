@@ -5,14 +5,14 @@
     <div th:replace="fragments.html :: main-nav"></div>
 
     <div class="py-5 text-center" th:if="${error}">
-        <p class="lead">넷플프렌드 이메일 확인</p>
+        <p class="lead">넷플프렌즈 이메일 확인</p>
         <div class="alert alert-danger" role="alert">
             이메일 확인 링크가 정확하지 않습니다.
         </div>
     </div>
 
     <div class="py-5 text-center" th:if="${error == null}">
-        <p class="lead">넷플프렌드 이메일 확인</p>
+        <p class="lead">넷플프렌즈 이메일 확인</p>
         <h2>
            이메일을 확인했습니다. <span th:text="${numberOfUser}">10</span>번째 회원,
             <span th:text="${nickname}">백기선</span>님 가입을 축하합니다.

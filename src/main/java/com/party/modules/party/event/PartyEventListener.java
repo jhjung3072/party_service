@@ -66,7 +66,7 @@ public class PartyEventListener {
         accounts.forEach(account -> {
             if (account.isPartyUpdatedByEmail()) {
                 sendPartyCreatedEmail(party, account, partyUpdateEvent.getMessage(),
-                        "넷플프렌드, '" + party.getTitle() + "' 파티에 새소식이 있습니다.");
+                        "넷플프렌즈, '" + party.getTitle() + "' 파티에 새소식이 있습니다.");
             }
 
             if (account.isPartyUpdatedByWeb()) {

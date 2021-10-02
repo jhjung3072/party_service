@@ -6,6 +6,8 @@ import com.party.modules.account.AccountService;
 import com.party.modules.account.form.SignUpForm;
 import com.party.modules.party.Party;
 import com.party.modules.party.PartyService;
+import com.party.modules.post.Post;
+import com.party.modules.post.PostService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,9 +21,6 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -31,11 +30,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
-class EventControllerTest  {
+class PostControllerTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired EventService eventService;
-    @Autowired EnrollmentRepository enrollmentRepository;
+    @Autowired
+    PostService postService;
     @Autowired AccountRepository accountRepository;
     @Autowired
     PartyService partyService;
@@ -62,15 +61,15 @@ class EventControllerTest  {
     void newEnrollment_to_FCFS_event_accepted() throws Exception {
         Account nana = createAccount("nana");
         Party party = createParty("test-party", nana);
-        Event event = createEvent("test-event", 2, party, nana);
+        Post post = createEvent("test-post", 2, party, nana);
 
-        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/enroll")
+        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + post.getId() + "/enroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + event.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + post.getId()));
 
         Account jaeho = accountRepository.findByNickname("jaeho");
-        isAccepted(jaeho, event);
+        isAccepted(jaeho, post);
     }
 
     @Test
@@ -79,18 +78,18 @@ class EventControllerTest  {
     void newEnrollment_to_FCFS_event_not_accepted() throws Exception {
         Account nana = createAccount("nana");
         Party party = createParty("test-party", nana);
-        Event event = createEvent("test-event", 2, party, nana);
+        Post post = createEvent("test-post", 2, party, nana);
 
         Account may = createAccount("may");
         Account june = createAccount("june");
 
-        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/enroll")
+        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + post.getId() + "/enroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + event.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + post.getId()));
 
         Account jaeho = accountRepository.findByNickname("jaeho");
-        isNotAccepted(jaeho, event);
+        isNotAccepted(jaeho, post);
     }
 
     @Test
@@ -101,21 +100,21 @@ class EventControllerTest  {
         Account nana = createAccount("nana");
         Account may = createAccount("may");
         Party party = createParty("test-party", nana);
-        Event event = createEvent("test-event", 2, party, nana);
+        Post post = createEvent("test-post", 2, party, nana);
 
 
-        isAccepted(may, event);
-        isAccepted(jaeho, event);
-        isNotAccepted(nana, event);
+        isAccepted(may, post);
+        isAccepted(jaeho, post);
+        isNotAccepted(nana, post);
 
-        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/disenroll")
+        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + post.getId() + "/disenroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + event.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + post.getId()));
 
-        isAccepted(may, event);
-        isAccepted(nana, event);
-        assertNull(enrollmentRepository.findByEventAndAccount(event, jaeho));
+        isAccepted(may, post);
+        isAccepted(nana, post);
+
     }
 
     @Test
@@ -126,30 +125,30 @@ class EventControllerTest  {
         Account nana = createAccount("nana");
         Account may = createAccount("may");
         Party party = createParty("test-party", nana);
-        Event event = createEvent("test-event", 2, party, nana);
+        Post post = createEvent("test-post", 2, party, nana);
 
 
 
-        isAccepted(may, event);
-        isAccepted(nana, event);
-        isNotAccepted(jaeho, event);
+        isAccepted(may, post);
+        isAccepted(nana, post);
+        isNotAccepted(jaeho, post);
 
-        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/disenroll")
+        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + post.getId() + "/disenroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + event.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + post.getId()));
 
-        isAccepted(may, event);
-        isAccepted(nana, event);
-        assertNull(enrollmentRepository.findByEventAndAccount(event, jaeho));
+        isAccepted(may, post);
+        isAccepted(nana, post);
+
     }
 
-    private void isNotAccepted(Account nana, Event event) {
-        assertFalse(enrollmentRepository.findByEventAndAccount(event, nana).isAccepted());
+    private void isNotAccepted(Account nana, Post post) {
+
     }
 
-    private void isAccepted(Account account, Event event) {
-        assertTrue(enrollmentRepository.findByEventAndAccount(event, account).isAccepted());
+    private void isAccepted(Account account, Post post) {
+
     }
 
     @Test
@@ -158,22 +157,22 @@ class EventControllerTest  {
     void newEnrollment_to_CONFIMATIVE_event_not_accepted() throws Exception {
         Account nana = createAccount("nana");
         Party party = createParty("test-party", nana);
-        Event event = createEvent("test-event", 2, party, nana);
+        Post post = createEvent("test-post", 2, party, nana);
 
-        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + event.getId() + "/enroll")
+        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + post.getId() + "/enroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + event.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + post.getId()));
 
         Account jaeho = accountRepository.findByNickname("jaeho");
-        isNotAccepted(jaeho, event);
+        isNotAccepted(jaeho, post);
     }
 
-    private Event createEvent(String eventTitle, int limit, Party party, Account account) {
-        Event event = new Event();
-        event.setTitle(eventTitle);
+    private Post createEvent(String eventTitle, int limit, Party party, Account account) {
+        Post post = new Post();
+        post.setTitle(eventTitle);
 
-        return eventService.createEvent(event, party, account);
+        return postService.createPost(post, party, account);
     }
     protected Party createParty(String path, Account manager){
         Party party = new Party();

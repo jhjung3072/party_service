@@ -1,7 +1,5 @@
 package com.party.modules.party.validator;
 
-import com.party.modules.event.Event;
-import com.party.modules.event.form.EventForm;
 import com.party.modules.party.PartyRepository;
 import com.party.modules.party.form.PartyForm;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.party.modules.event.form;
+package com.party.modules.post.form;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
-public class EventForm {
+public class PostForm {
 
     @NotBlank
     @Length(max = 50)

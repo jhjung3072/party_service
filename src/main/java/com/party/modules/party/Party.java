@@ -2,7 +2,6 @@ package com.party.modules.party;
 
 import com.party.modules.account.Account;
 import com.party.modules.account.UserAccount;
-import com.party.modules.event.Enrollment;
 import com.party.modules.platform.Platform;
 import com.party.modules.tag.Tag;
 import lombok.*;
@@ -81,9 +80,10 @@ public class Party {
 
     public boolean isJoinable(UserAccount userAccount) {
         Account account = userAccount.getAccount();
-        //파티가 공개되었고, 모집중이고, 해당 유저가 멤버나 매니저가 아닐 경우 true
+        //파티가 공개되었고, 모집중이고, 해당 유저가 멤버나 매니저가 아니고, 인원이 부족하다면 true
         return this.isPublished() && this.isRecruiting()
-                && !this.members.contains(account) && !this.managers.contains(account);
+                && !this.members.contains(account) && !this.managers.contains(account)
+                && this.memberCount < limitOfEnrollments;
 
     }
 
@@ -148,7 +148,7 @@ public class Party {
     // 모집 수정 가능 여부
     public boolean canUpdateRecruiting() {
         // 파티가 공개되었고, 모집 수정 시간이 null 이거나 모집 수정 시간이 1시간 전 일 경우 true
-        return this.published && this.recruitingUpdatedDateTime == null || this.recruitingUpdatedDateTime.isBefore(LocalDateTime.now().minusHours(1));
+        return this.published && this.recruitingUpdatedDateTime == null || this.recruitingUpdatedDateTime.isBefore(LocalDateTime.now().minusSeconds(1));
     }
 
     //파티 삭제 가능 여부
