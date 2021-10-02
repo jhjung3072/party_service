@@ -46,14 +46,14 @@ public class PartyRepositoryExtensionImpl extends QuerydslRepositorySupport impl
     public List<Party> findByAccount(Set<Tag> tags, Set<Platform> platforms) {
         QParty party = QParty.party;
         JPQLQuery<Party> query = from(party).where(party.published.isTrue() //공개된 파티
-                .and(party.closed.isFalse()) // and 아직 종료되지 않았고
-                .and(party.tags.any().in(tags))  // and 파티의 태그가 account의 태그
-                .and(party.platforms.any().in(platforms))) // and 파티의 플랫폼이 account의 플랫폼
-                .leftJoin(party.tags, QTag.tag).fetchJoin()
-                .leftJoin(party.platforms, QPlatform.platform).fetchJoin()
-                .orderBy(party.publishedDateTime.desc())
-                .distinct()
-                .limit(9);
-        return query.fetch();
+                        .and(party.recruiting.isTrue()) // and 모집중
+                        .and(party.closed.isFalse()) // and 아직 종료되지 않았고
+                        .and(party.tags.any().in(tags).or(party.platforms.any().in(platforms))))  // and 파티의 태그 or 플랫폼이 있고
+                        .leftJoin(party.tags, QTag.tag).fetchJoin()
+                        .leftJoin(party.platforms, QPlatform.platform).fetchJoin()
+                        .orderBy(party.publishedDateTime.desc())
+                        .distinct()
+                        .limit(9);
+                return query.fetch();
     }
 }
