@@ -130,7 +130,7 @@ public class PartyService {
     // 파티 공개 및 알림
     public void publish(Party party) {
         party.publish();
-        this.eventPublisher.publishEvent(new PartyCreatedEvent(party));
+
     }
 
     // 파티 종료 및 알림
@@ -142,6 +142,7 @@ public class PartyService {
     // 파티 멤버 모집 시작 및 알림
     public void startRecruit(Party party) {
         party.startRecruit();
+        this.eventPublisher.publishEvent(new PartyCreatedEvent(party));
         eventPublisher.publishEvent(new PartyUpdateEvent(party, "팀원 모집을 시작합니다."));
     }
 

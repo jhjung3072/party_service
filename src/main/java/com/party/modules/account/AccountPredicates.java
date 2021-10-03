@@ -9,10 +9,10 @@ import java.util.Set;
 
 public class AccountPredicates {
 
-    public static Predicate findByTagsAndPlatforms(Set<Tag> tags, Set<Platform> platforms) {
+    public static Predicate findByTagsOrPlatforms(Set<Tag> tags, Set<Platform> platforms) {
         QAccount account = QAccount.account;
         // platforms,tags를 갖고 있는 accounts 를 조회
-        return account.platforms.any().in(platforms).and(account.tags.any().in(tags));
+        return account.platforms.any().in(platforms).or(account.tags.any().in(tags));
     }
 
 }

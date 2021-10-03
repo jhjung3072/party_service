@@ -60,14 +60,14 @@
 
                 <div class="card" th:if="${newPartyNotifications.size() > 0}">
                     <div class="card-header">
-                        주요 활동 플랫폼에 관심있는 주제의 파티가 생겼습니다.
+                        당신이 관심있을 만한 파티가 팀원을 모집중입니다.
                     </div>
                     <div th:replace="fragments.html :: notification-list (notifications=${newPartyNotifications})"></div>
                 </div>
 
                 <div class="card mt-4" th:if="${newPostNotification.size() > 0}">
                     <div class="card-header">
-                        모임 참가 신청 관련 소식이 있습니다.
+                        새로운 추천 작품 게시글이 작성되었습니다.
                     </div>
                     <div th:replace="fragments.html :: notification-list (notifications=${newPostNotification})"></div>
                 </div>

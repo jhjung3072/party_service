@@ -42,11 +42,11 @@ public class PartyEventListener {
     public void handlePartyCreatedEvent(PartyCreatedEvent partyCreatedEvent) {
         Party party = partyRepository.findPartyWithTagsAndPlatformsById(partyCreatedEvent.getParty().getId());
         //만들어진 Party의 Tags 와 Platforms를 갖고 있는 account 리스트
-        Iterable<Account> accounts = accountRepository.findAll(AccountPredicates.findByTagsAndPlatforms(party.getTags(), party.getPlatforms()));
+        Iterable<Account> accounts = accountRepository.findAll(AccountPredicates.findByTagsOrPlatforms(party.getTags(), party.getPlatforms()));
         accounts.forEach(account -> {
             if (account.isPartyCreatedByEmail()) {
-                sendPartyCreatedEmail(party, account, "새로운 파티가 생겼습니다",
-                        "넷플프렌드, '" + party.getTitle() + "' 파티가 생겼습니다.");
+                sendPartyCreatedEmail(party, account, "새로운 파티가 팀원을 모집중입니다.",
+                        "넷플프렌드, '" + party.getTitle() + "' 파티가 팀원을 모집중입니다.");
             }
 
             if (account.isPartyCreatedByWeb()) {
