@@ -13,9 +13,6 @@
             <div th:if="${param.error}" class="alert alert-danger" role="alert">
                 <p>이메일(또는 닉네임)과 패스워드가 정확하지 않습니다.</p>
                 <p>또는 확인되지 않은 이메일을 사용했습니다. 이메일을 확인해 주세요.</p>
-                <p>
-                    확인 후 다시 입력하시거나, <a href="#" th:href="@{/find-passsword}">패스워드 찾기</a>를 이용하세요.
-                </p>
             </div>
 
             <form class="needs-validation col-sm-6" action="#" th:action="@{/login}" method="post" novalidate>
@@ -47,7 +44,7 @@
                     <button class="btn btn-success btn-block" type="submit"
                             aria-describedby="submitHelp">로그인</button>
                     <small id="submitHelp" class="form-text text-muted">
-                        넷플프렌즈에 처음 오신거라면 <a href="#" th:href="@{/signup}">계정을 먼저 만드세요.</a>
+                        넷플프렌즈에 처음 오신거라면 <a href="#" th:href="@{/sign-up}">계정을 먼저 만드세요.</a>
                     </small>
                 </div>
             </form>

@@ -4,105 +4,24 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:fragment="head">
-    <meta charset="UTF-8">
-    <title>PartyOlle</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>넷플프렌즈</title>
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
     <link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs4.min.css">
+    <link rel="stylesheet" href="/css/app.css">
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
-    <style>
-        .container {
-            max-width: 100%;
-        }
 
-        .tagify-outside{
-            border: 0;
-            padding: 0;
-            margin: 0;
-        }
 
-        #party-logo {
-            height: 200px;
-            width: 100%;
-            overflow: hidden;
-            padding: 0;
-            margin: 0;
-        }
-
-        #party-logo img {
-            height: auto;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        }
-
-        body,
-        input,
-        button,
-        select,
-        optgroup,
-        textarea,
-        .tooltip,
-        .popover {
-            font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        }
-
-        table th {
-            font-weight: lighter;
-        }
-
-        mark {
-            padding: 0;
-            background: transparent;
-            background: linear-gradient(to right, #f0ad4e 50%, transparent 50%);
-            background-position: right bottom;
-            background-size: 200% 100%;
-            transition: all .5s ease;
-            color: #fff;
-        }
-
-        mark.animate {
-            background-position: left bottom;
-            color: #000;
-        }
-
-        .jumbotron {
-            padding-top: 3rem;
-            padding-bottom: 3rem;
-            margin-bottom: 0;
-            background-color: #fff;
-        }
-        @media (min-width: 768px) {
-            .jumbotron {
-                padding-top: 6rem;
-                padding-bottom: 6rem;
-            }
-        }
-
-        .jumbotron p:last-child {
-            margin-bottom: 0;
-        }
-
-        .jumbotron h1 {
-            font-weight: 300;
-        }
-
-        .jumbotron .container {
-            max-width: 40rem;
-        }
-    </style>
 </head>
 
-<nav th:fragment="main-nav" class="navbar navbar-expand-sm navbar-dark bg-dark">
+<nav th:fragment="main-nav" class="navbar navbar-expand-sm" style="background-color: #B22222">
     <a class="navbar-brand" href="/" th:href="@{/}">
-        <img src="/images/logo_sm.png" width="30" height="30">
+        <img src="/images/netflix_small.png" width="60" height="60">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -117,34 +36,34 @@
             </li>
         </ul>
 
-        <ul class="navbar-nav justify-content-end">
-            <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" th:href="@{/login}">로그인</a>
+        <ul class="navbar-nav justify-content-end" >
+            <li class="nav-item" sec:authorize="!isAuthenticated()" >
+                <a class="nav-link" th:href="@{/login}"  style="color: #eeeeee">로그인</a>
             </li>
             <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" th:href="@{/sign-up}">가입</a>
+                <a class="nav-link" th:href="@{/sign-up}"  style="color: #eeeeee">가입</a>
             </li>
-            <li class="nav-item" sec:authorize="isAuthenticated()">
+            <li class="nav-item" sec:authorize="isAuthenticated()" >
                 <a class="nav-link" th:href="@{/notifications}">
-                    <i th:if="${!hasNotification}" class="fa fa-bell-o" aria-hidden="true"></i>
+                    <i th:if="${!hasNotification}" class="fa fa-bell-o" aria-hidden="true"  style="color: #eeeeee"></i>
                     <span class="text-info" th:if="${hasNotification}"><i class="fa fa-bell" aria-hidden="true"></i></span>
                 </a>
             </li>
-            <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link btn btn-outline-primary" th:href="@{/new-party}">
-                    <i class="fa fa-plus" aria-hidden="true"></i> 파티 개설
+            <li class="nav-item" sec:authorize="isAuthenticated()"  style="color: #eeeeee">
+                <a class="nav-link btn"  style="color: #eeeeee" th:href="@{/new-party}">
+                    <i class="fa fa-plus" aria-hidden="true"  style="color: #eeeeee"></i> 파티 개설
                 </a>
             </li>
             <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
+                   aria-haspopup="true" aria-expanded="false"  style="color: #eeeeee">
                     <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
                          width="24" height="24" class="rounded border bg-light"></svg>
                     <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}"
                          width="24" height="24" class="rounded border"/>
                 </a>
-                <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
-                    <h6 class="dropdown-header">
+                <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown" >
+                    <h6 class="dropdown-header" >
                         <span sec:authentication="name">Username</span>
                     </h6>
                     <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">프로필</a>
@@ -162,8 +81,8 @@
 
 <footer th:fragment="footer">
     <div class="row justify-content-center">
-        <img class="mb-2" src="/images/logo_long_kr.jpg" alt="" width="100">
-        <small class="d-block mb-3 text-muted">&copy; 2020</small>
+        <img class="mb-2 mr-2" src="/images/footer_logo.png" alt="" width="100">
+        <small class="d-block mb-3 text-muted">&copy; 2021</small>
     </div>
 </footer>
 

@@ -1,0 +1,98 @@
+.container {
+    max-width: 100%;
+}
+
+.tagify-outside{
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+#party-logo {
+    height: 200px;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+#party-logo img {
+    height: auto;
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+body,
+input,
+button,
+select,
+optgroup,
+textarea,
+.tooltip,
+.popover {
+    font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+table th {
+    font-weight: lighter;
+}
+
+mark {
+    padding: 0;
+    background: transparent;
+    background: linear-gradient(to right, #f0ad4e 50%, transparent 50%);
+    background-position: right bottom;
+    background-size: 200% 100%;
+    transition: all .5s ease;
+    color: #fff;
+}
+
+mark.animate {
+    background-position: left bottom;
+    color: #000;
+}
+
+.jumbotron {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    margin-bottom: 0;
+    background-color: #fff;
+}
+@media (min-width: 768px) {
+    .jumbotron {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+    }
+}
+
+.jumbotron p:last-child {
+    margin-bottom: 0;
+}
+
+.jumbotron h1 {
+    font-weight: 300;
+}
+
+.jumbotron .container {
+    max-width: 40rem;
+}
+
+.netflix-bg {
+    background-image: url("../images/netflix_bg.png");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    -webkit-background-size: cover;
+    background-position: 50% 50%;
+}
+.netflix-overlay {
+
+    padding-top: 150px;
+    padding-bottom: 150px;
+}
