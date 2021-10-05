@@ -27,9 +27,6 @@ public class Party {
     @ManyToMany
     private Set<Account> members = new HashSet<>();
 
-    @Column(unique = true)
-    private String path;
-
     private String kakaoLink;
 
     private String title;
@@ -172,11 +169,6 @@ public class Party {
     public int numberOfRemainSpots() {
         // 제한 모집인원 수 - 현재 승인된 모집 인원 수
         return this.limitOfEnrollments - this.memberCount;
-    }
-
-    //party 경로가 한글이 쓰일 수 있으므로 URLEncoder 사용
-    public String getEncodedPath() {
-        return URLEncoder.encode(this.path, StandardCharsets.UTF_8);
     }
 
     //해당 파티의 Manager 인지 구분

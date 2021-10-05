@@ -37,16 +37,16 @@ public class PartyService {
     }
 
     //  파티 수정을 위한 getParty
-    public Party getPartyToUpdate(Account account, String path) {
-        Party party = this.getParty(path);
+    public Party getPartyToUpdate(Account account, Long id) {
+        Party party = this.getParty(id);
         checkIfManager(account, party);
         return party;
     }
 
     //  파티 목록을 위한 getParty
-    public Party getParty(String path) {
-        Party party = this.repository.findByPath(path);
-        checkIfExistingParty(path, party);
+    public Party getParty(Long id) {
+        Party party = this.repository.findPartyById(id);
+        checkIfExistingParty(id, party);
         return party;
     }
 
@@ -92,25 +92,25 @@ public class PartyService {
     }
 
     //태그 추가,삭제를 위한 getParty
-    public Party getPartyToUpdateTag(Account account, String path) {
-        Party party = repository.findPartyWithTagsByPath(path);
-        checkIfExistingParty(path, party);
+    public Party getPartyToUpdateTag(Account account, Long id) {
+        Party party = repository.findPartyWithTagsById(id);
+        checkIfExistingParty(id, party);
         checkIfManager(account, party);
         return party;
     }
 
     //플랫폼 추가,삭제를 위한 Party get
-    public Party getPartyToUpdatePlatform(Account account, String path) {
-        Party party = repository.findPartyWithPlatformsByPath(path);
-        checkIfExistingParty(path, party);
+    public Party getPartyToUpdatePlatform(Account account, Long id) {
+        Party party = repository.findPartyWithPlatformsById(id);
+        checkIfExistingParty(id, party);
         checkIfManager(account, party);
         return party;
     }
 
     //파티 및 모임 수정을 Party get
-    public Party getPartyToUpdateStatus(Account account, String path) {
-        Party party = repository.findPartyWithManagersByPath(path);
-        checkIfExistingParty(path, party);
+    public Party getPartyToUpdateStatus(Account account, Long id) {
+        Party party = repository.findPartyWithManagersById(id);
+        checkIfExistingParty(id, party);
         checkIfManager(account, party);
         return party;
     }
@@ -121,9 +121,9 @@ public class PartyService {
         }
     }
 
-    private void checkIfExistingParty(String path, Party party) {
+    private void checkIfExistingParty(Long id, Party party) {
         if (party == null) {
-            throw new IllegalArgumentException(path + "에 해당하는 파티가 없습니다.");
+            throw new IllegalArgumentException(id + "에 해당하는 파티가 없습니다.");
         }
     }
 
@@ -152,18 +152,6 @@ public class PartyService {
         eventPublisher.publishEvent(new PartyUpdateEvent(party, "팀원 모집을 중단했습니다."));
     }
 
-    // 파티 경로 타당성 검사
-    public boolean isValidPath(String newPath) {
-        if (!newPath.matches(VALID_PATH_PATTERN)) {
-            return false;
-        }
-        return !repository.existsByPath(newPath);
-    }
-
-    // 파티 경로 수정
-    public void updatePartyPath(Party party, String newPath) {
-        party.setPath(newPath);
-    }
 
     // 파티 제목 타당성 검사
     public boolean isValidTitle(String newTitle) {
@@ -194,19 +182,11 @@ public class PartyService {
         party.removeMember(account);
     }
 
-    //모집참가 신청 및 취소 요청을 위한 getParty
-    public Party getPartyToEnroll(String path) {
-        Party party = repository.findPartyOnlyByPath(path);
-        checkIfExistingParty(path, party);
-        return party;
-    }
-
     public void generateTestStudies(Account account) {
         for (int i=0; i<30; i++){
             String randomvalue= RandomString.make(5);
             Party party = Party.builder()
                     .title("테스트 파티" + randomvalue)
-                    .path("test-" + randomvalue)
                     .shortDescription("테스트용 파티")
                     .fullDescription("test")
                     .tags(new HashSet<>())

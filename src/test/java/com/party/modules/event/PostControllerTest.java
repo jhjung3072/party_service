@@ -60,13 +60,13 @@ class PostControllerTest {
     @WithUserDetails(value = "jaeho", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void newEnrollment_to_FCFS_event_accepted() throws Exception {
         Account nana = createAccount("nana");
-        Party party = createParty("test-party", nana);
+        Party party = createParty(123L, nana);
         Post post = createEvent("test-post", 2, party, nana);
 
-        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + post.getId() + "/enroll")
+        mockMvc.perform(post("/party/" + party.getId() + "/events/" + post.getId() + "/enroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + post.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getId() + "/events/" + post.getId()));
 
         Account jaeho = accountRepository.findByNickname("jaeho");
         isAccepted(jaeho, post);
@@ -77,16 +77,16 @@ class PostControllerTest {
     @WithUserDetails(value = "jaeho", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void newEnrollment_to_FCFS_event_not_accepted() throws Exception {
         Account nana = createAccount("nana");
-        Party party = createParty("test-party", nana);
+        Party party = createParty(123L, nana);
         Post post = createEvent("test-post", 2, party, nana);
 
         Account may = createAccount("may");
         Account june = createAccount("june");
 
-        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + post.getId() + "/enroll")
+        mockMvc.perform(post("/party/" + party.getId() + "/events/" + post.getId() + "/enroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + post.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getId() + "/events/" + post.getId()));
 
         Account jaeho = accountRepository.findByNickname("jaeho");
         isNotAccepted(jaeho, post);
@@ -99,7 +99,7 @@ class PostControllerTest {
         Account jaeho = accountRepository.findByNickname("jaeho");
         Account nana = createAccount("nana");
         Account may = createAccount("may");
-        Party party = createParty("test-party", nana);
+        Party party = createParty(123L, nana);
         Post post = createEvent("test-post", 2, party, nana);
 
 
@@ -107,10 +107,10 @@ class PostControllerTest {
         isAccepted(jaeho, post);
         isNotAccepted(nana, post);
 
-        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + post.getId() + "/disenroll")
+        mockMvc.perform(post("/party/" + party.getId() + "/events/" + post.getId() + "/disenroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + post.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getId() + "/events/" + post.getId()));
 
         isAccepted(may, post);
         isAccepted(nana, post);
@@ -124,7 +124,7 @@ class PostControllerTest {
         Account jaeho = accountRepository.findByNickname("jaeho");
         Account nana = createAccount("nana");
         Account may = createAccount("may");
-        Party party = createParty("test-party", nana);
+        Party party = createParty(123L, nana);
         Post post = createEvent("test-post", 2, party, nana);
 
 
@@ -133,10 +133,10 @@ class PostControllerTest {
         isAccepted(nana, post);
         isNotAccepted(jaeho, post);
 
-        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + post.getId() + "/disenroll")
+        mockMvc.perform(post("/party/" + party.getId() + "/events/" + post.getId() + "/disenroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + post.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getId() + "/events/" + post.getId()));
 
         isAccepted(may, post);
         isAccepted(nana, post);
@@ -156,13 +156,13 @@ class PostControllerTest {
     @WithUserDetails(value = "jaeho", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void newEnrollment_to_CONFIMATIVE_event_not_accepted() throws Exception {
         Account nana = createAccount("nana");
-        Party party = createParty("test-party", nana);
+        Party party = createParty(123L, nana);
         Post post = createEvent("test-post", 2, party, nana);
 
-        mockMvc.perform(post("/party/" + party.getPath() + "/events/" + post.getId() + "/enroll")
+        mockMvc.perform(post("/party/" + party.getId() + "/events/" + post.getId() + "/enroll")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/party/" + party.getPath() + "/events/" + post.getId()));
+                .andExpect(redirectedUrl("/party/" + party.getId() + "/events/" + post.getId()));
 
         Account jaeho = accountRepository.findByNickname("jaeho");
         isNotAccepted(jaeho, post);
@@ -174,9 +174,9 @@ class PostControllerTest {
 
         return postService.createPost(post, party, account);
     }
-    protected Party createParty(String path, Account manager){
+    protected Party createParty(Long id, Account manager){
         Party party = new Party();
-        party.setPath(path);
+
         partyService.createNewParty(party,manager);
         return party;
     }

@@ -16,11 +16,6 @@ public class PartyForm {
     public static final String VALID_PATH_PATTERN = "^[ㄱ-ㅎ가-힣a-z0-9_-]{2,20}$";
 
     @NotBlank
-    @Length(min = 2, max = 20)
-    @Pattern(regexp = VALID_PATH_PATTERN)
-    private String path;
-
-    @NotBlank
     @Pattern(regexp = VALID_PATH_PATTERN)
     private String kakaoLink;
 

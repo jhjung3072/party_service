@@ -52,50 +52,50 @@ public class PartyController {
 
         Party newParty = partyService.createNewParty(modelMapper.map(partyForm, Party.class), account);
         //party 경로가 한글이 쓰일 수 있으므로 URLEncoder 사용
-        return "redirect:/party/" + URLEncoder.encode(newParty.getPath(), StandardCharsets.UTF_8);
+        return "redirect:/party/" + newParty.getId();
     }
 
     // 파티 상세 뷰
-    @GetMapping("/party/{path}")
-    public String viewParty(@CurrentAccount Account account, @PathVariable String path, Model model) {
-        Party party = partyService.getParty(path);
+    @GetMapping("/party/{id}")
+    public String viewParty(@CurrentAccount Account account, @PathVariable Long id, Model model) {
+        Party party = partyService.getParty(id);
         model.addAttribute(account);
         model.addAttribute(party);
         return "party/view";
     }
 
     // 파티 멤버 뷰
-    @GetMapping("/party/{path}/members")
-    public String viewPartyMembers(@CurrentAccount Account account, @PathVariable String path, Model model) {
-        Party party = partyService.getParty(path);
+    @GetMapping("/party/{id}/members")
+    public String viewPartyMembers(@CurrentAccount Account account, @PathVariable Long id, Model model) {
+        Party party = partyService.getParty(id);
         model.addAttribute(account);
         model.addAttribute(party);
         return "party/members";
     }
 
     // 카카오 오픈채팅방 링크
-    @GetMapping("/party/{path}/kakaoLink")
-    public String viewKakaoLink(@CurrentAccount Account account, @PathVariable String path, Model model) {
-        Party party = partyService.getParty(path);
+    @GetMapping("/party/{id}/kakaoLink")
+    public String viewKakaoLink(@CurrentAccount Account account, @PathVariable Long id, Model model) {
+        Party party = partyService.getParty(id);
         model.addAttribute(account);
         model.addAttribute(party);
         return "party/kakao-link";
     }
 
     // 파티 참가 Post
-    @GetMapping("/party/{path}/join")
-    public String joinParty(@CurrentAccount Account account, @PathVariable String path) {
-        Party party = partyRepository.findPartyWithMembersByPath(path);
+    @GetMapping("/party/{id}/join")
+    public String joinParty(@CurrentAccount Account account, @PathVariable Long id) {
+        Party party = partyRepository.findPartyWithMembersById(id);
         partyService.addMember(party, account);
-        return "redirect:/party/" + party.getEncodedPath() + "/members";
+        return "redirect:/party/" + party.getId() + "/members";
     }
 
     // 파티 탈퇴 Post
-    @GetMapping("/party/{path}/leave")
-    public String leaveParty(@CurrentAccount Account account, @PathVariable String path) {
-        Party party = partyRepository.findPartyWithMembersByPath(path);
+    @GetMapping("/party/{id}/leave")
+    public String leaveParty(@CurrentAccount Account account, @PathVariable Long id) {
+        Party party = partyRepository.findPartyWithMembersById(id);
         partyService.removeMember(party, account);
-        return "redirect:/party/" + party.getEncodedPath() + "/members";
+        return "redirect:/party/" + party.getId()+ "/members";
     }
 
     @GetMapping("/party/data")

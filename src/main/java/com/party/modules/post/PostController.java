@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/party/{path}")
+@RequestMapping("/party/{id}")
 @RequiredArgsConstructor
 public class PostController {
 
@@ -29,8 +29,8 @@ public class PostController {
 
     // 새 모임 생성 Get
     @GetMapping("/new-post")
-    public String newPostForm(@CurrentAccount Account account, @PathVariable String path, Model model) {
-        Party party = partyService.getPartyToUpdateStatus(account, path);
+    public String newPostForm(@CurrentAccount Account account, @PathVariable Long id, Model model) {
+        Party party = partyService.getPartyToUpdateStatus(account, id);
         model.addAttribute(party);
         model.addAttribute(account);
         model.addAttribute(new PostForm());
@@ -39,9 +39,9 @@ public class PostController {
 
     // 새 모임 생성 Post
     @PostMapping("/new-post")
-    public String newPostSubmit(@CurrentAccount Account account, @PathVariable String path,
+    public String newPostSubmit(@CurrentAccount Account account, @PathVariable Long id,
                                  @Valid PostForm postForm, Errors errors, Model model) {
-        Party party = partyService.getPartyToUpdateStatus(account, path);
+        Party party = partyService.getPartyToUpdateStatus(account, id);
         if (errors.hasErrors()) {
             model.addAttribute(account);
             model.addAttribute(party);
@@ -49,14 +49,14 @@ public class PostController {
         }
 
         Post post = postService.createPost(modelMapper.map(postForm, Post.class), party, account);
-        return "redirect:/party/" + party.getEncodedPath() + "/posts/";
+        return "redirect:/party/" + party.getId() + "/posts/";
     }
 
 
     // 모임 전체 목록 뷰
     @GetMapping("/posts")
-    public String viewPartyPosts(@CurrentAccount Account account, @PathVariable String path, Model model) {
-        Party party = partyService.getParty(path);
+    public String viewPartyPosts(@CurrentAccount Account account, @PathVariable Long id, Model model) {
+        Party party = partyService.getParty(id);
         List<Post> posts = postRepository.findByParty(party);
         model.addAttribute("posts", posts);
         model.addAttribute(account);
@@ -68,8 +68,8 @@ public class PostController {
     // 모임 수정 뷰
     @GetMapping("/posts/{id}/edit")
     public String updatePostForm(@CurrentAccount Account account,
-                                  @PathVariable String path, @PathVariable("id") Post post, Model model) {
-        Party party = partyService.getPartyToUpdate(account, path);
+                                  @PathVariable Long id, @PathVariable("id") Post post, Model model) {
+        Party party = partyService.getPartyToUpdate(account, id);
         model.addAttribute(party);
         model.addAttribute(account);
         model.addAttribute(post);
@@ -79,10 +79,10 @@ public class PostController {
 
     // 모임 수정 Post
     @PostMapping("/posts/{id}/edit")
-    public String updatePostSubmit(@CurrentAccount Account account, @PathVariable String path,
+    public String updatePostSubmit(@CurrentAccount Account account, @PathVariable Long id,
                                     @PathVariable("id") Post post, @Valid PostForm postForm, Errors errors,
                                     Model model) {
-        Party party = partyService.getPartyToUpdate(account, path);
+        Party party = partyService.getPartyToUpdate(account, id);
 
 
         if (errors.hasErrors()) {
@@ -93,15 +93,15 @@ public class PostController {
         }
 
         postService.updatePost(post, postForm);
-        return "redirect:/party/" + party.getEncodedPath() +  "/posts/";
+        return "redirect:/party/" + party.getId() +  "/posts/";
     }
 
     // 모임취소 Delete
     @DeleteMapping("/posts/{id}")
-    public String cancelPost(@CurrentAccount Account account, @PathVariable String path, @PathVariable("id") Post post) {
-        Party party = partyService.getPartyToUpdateStatus(account, path);
+    public String cancelPost(@CurrentAccount Account account, @PathVariable Long id, @PathVariable("id") Post post) {
+        Party party = partyService.getPartyToUpdateStatus(account, id);
         postService.deletePost(post);
-        return "redirect:/party/" + party.getEncodedPath() + "/posts";
+        return "redirect:/party/" + party.getId() + "/posts";
     }
 
 

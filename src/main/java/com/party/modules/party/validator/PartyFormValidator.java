@@ -23,10 +23,6 @@ public class PartyFormValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         PartyForm partyForm = (PartyForm)target;
-        //파티경로가 이미 존재한다면 reject
-        if (partyRepository.existsByPath(partyForm.getPath())) {
-            errors.rejectValue("path", "wrong.path", "해당 파티 경로값을 사용할 수 없습니다.");
-        }
 
         if (isNotValidStartDateTime(partyForm)) {
             errors.rejectValue("startDateTime", "wrong.datetime", "파티 시작 일시를 정확히 입력하세요.");

@@ -39,7 +39,7 @@
                 <h5 class="font-weight-light" th:if="${#lists.isEmpty(partyManagerOf)}">관리중인 파티가 없습니다.</h5>
                 <h5 class="font-weight-light" th:if="${!#lists.isEmpty(partyManagerOf)}">관리중인 파티</h5>
                 <div class="list-group" th:if="${!#lists.isEmpty(partyManagerOf)}">
-                    <a href="#" th:href="@{'/party/' + ${party.path}}" th:text="${party.title}"
+                    <a href="#" th:href="@{'/party/' + ${party.id}}" th:text="${party.title}"
                        class="list-group-item list-group-item-action" th:each="party: ${partyManagerOf}">
                         Party title
                     </a>
@@ -48,7 +48,7 @@
                 <h5 class="font-weight-light mt-3" th:if="${#lists.isEmpty(partyMemberOf)}">참여중인 파티가 없습니다.</h5>
                 <h5 class="font-weight-light mt-3" th:if="${!#lists.isEmpty(partyMemberOf)}">참여중인 파티</h5>
                 <div class="list-group" th:if="${!#lists.isEmpty(partyMemberOf)}">
-                    <a href="#" th:href="@{'/party/' + ${party.path}}" th:text="${party.title}"
+                    <a href="#" th:href="@{'/party/' + ${party.id}}" th:text="${party.title}"
                        class="list-group-item list-group-item-action" th:each="party: ${partyMemberOf}">
                     Party title
                     </a>

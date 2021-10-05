@@ -31,6 +31,6 @@
         <div th:replace="fragments.html :: footer"></div>
     </div>
     <script th:replace="fragments.html :: ajax-csrf-header"></script>
-    <script th:replace="fragments.html :: update-tags(baseUrl='/party/' + ${party.path} + '/settings/tags')"></script>
+    <script th:replace="fragments.html :: update-tags(baseUrl='/party/' + ${party.id} + '/settings/tags')"></script>
 </body>
 </html>

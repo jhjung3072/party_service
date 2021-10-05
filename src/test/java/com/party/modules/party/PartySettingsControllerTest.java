@@ -36,9 +36,9 @@ class PartySettingsControllerTest extends PartyControllerTest {
     @DisplayName("파티 소개 수정 폼 조회 - 실패 (권한 없는 유저)")
     void updateDescriptionForm_fail() throws Exception {
         Account jaeho = createAccount("jaeho");
-        Party party = createParty("test-party", jaeho);
+        Party party = createParty(123L, jaeho);
 
-        mockMvc.perform(get("/party/" + party.getPath() + "/settings/description"))
+        mockMvc.perform(get("/party/" + party.getId() + "/settings/description"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"));
     }
@@ -48,9 +48,9 @@ class PartySettingsControllerTest extends PartyControllerTest {
     @DisplayName("파티 소개 수정 폼 조회 - 성공")
     void updateDescriptionForm_success() throws Exception {
         Account jaeho = accountRepository.findByNickname("jaeho");
-        Party party = createParty("test-party", jaeho);
+        Party party = createParty(123L, jaeho);
 
-        mockMvc.perform(get("/party/" + party.getPath() + "/settings/description"))
+        mockMvc.perform(get("/party/" + party.getId() + "/settings/description"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("party/settings/description"))
                 .andExpect(model().attributeExists("partyDescriptionForm"))
@@ -63,9 +63,9 @@ class PartySettingsControllerTest extends PartyControllerTest {
     @DisplayName("파티 소개 수정 - 성공")
     void updateDescription_success() throws Exception {
         Account jaeho = accountRepository.findByNickname("jaeho");
-        Party party = createParty("test-party", jaeho);
+        Party party = createParty(123L, jaeho);
 
-        String settingsDescriptionUrl = "/party/" + party.getPath() + "/settings/description";
+        String settingsDescriptionUrl = "/party/" + party.getId() + "/settings/description";
         mockMvc.perform(post(settingsDescriptionUrl)
                         .param("shortDescription", "short description")
                         .param("fullDescription", "full description")
@@ -80,9 +80,9 @@ class PartySettingsControllerTest extends PartyControllerTest {
     @DisplayName("파티 소개 수정 - 실패")
     void updateDescription_fail() throws Exception {
         Account jaeho = accountRepository.findByNickname("jaeho");
-        Party party = createParty("test-party", jaeho);
+        Party party = createParty(123L, jaeho);
 
-        String settingsDescriptionUrl = "/party/" + party.getPath() + "/settings/description";
+        String settingsDescriptionUrl = "/party/" + party.getId() + "/settings/description";
         mockMvc.perform(post(settingsDescriptionUrl)
                         .param("shortDescription", "")
                         .param("fullDescription", "full description")

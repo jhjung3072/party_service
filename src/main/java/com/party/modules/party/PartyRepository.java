@@ -6,28 +6,29 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface PartyRepository extends JpaRepository<Party, Long>, PartyRepositoryExtension {
 
-    boolean existsByPath(String path);
+    boolean existsById(Long id);
 
     @EntityGraph(attributePaths = {"tags", "platforms", "managers", "members"}, type = EntityGraph.EntityGraphType.LOAD)
-    Party findByPath(String path);
+    Party findPartyById(Long id);
 
     @EntityGraph(attributePaths = {"tags", "managers"})
-    Party findPartyWithTagsByPath(String path);
+    Party findPartyWithTagsById(Long id);
 
     @EntityGraph(attributePaths = {"platforms", "managers"})
-    Party findPartyWithPlatformsByPath(String path);
+    Party findPartyWithPlatformsById(Long id);
 
     @EntityGraph(attributePaths = "managers")
-    Party findPartyWithManagersByPath(String path);
+    Party findPartyWithManagersById(Long id);
 
     @EntityGraph(attributePaths = "members")
-    Party findPartyWithMembersByPath(String path);
+    Party findPartyWithMembersById(Long id);
 
-    Party findPartyOnlyByPath(String path);
+    Party findPartyOnlyById(Long id);
 
     @EntityGraph(attributePaths = {"platforms", "tags"})
     Party findPartyWithTagsAndPlatformsById(Long id);

@@ -10,7 +10,7 @@
         <div class="row py-4 text-left justify-content-center bg-light">
             <div class="col-6">
                 <span class="h2">
-                <a href="#" class="text-decoration-none" th:href="@{'/party/' + ${party.path}}">
+                <a href="#" class="text-decoration-none" th:href="@{'/party/' + ${party.id}}">
                     <span th:text="${party.title}">파티 이름</span>
                 </a> / </span>
                 <span class="h2" th:text="${post.title}"></span>
@@ -58,7 +58,7 @@
                 <dt th:if="${party.isManager(#authentication.principal)}" class="font-weight-light">모임 관리</dt>
                 <dd th:if="${party.isManager(#authentication.principal)}">
                     <a class="btn btn-outline-primary btn-sm my-1"
-                       th:href="@{'/party/' + ${party.path} + '/posts/' + ${post.id} + '/edit'}" >
+                       th:href="@{'/party/' + ${party.id} + '/posts/' + ${post.id} + '/edit'}" >
                         모임 수정
                     </a> <br/>
                     <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel">
@@ -82,7 +82,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                            <form th:action="@{'/party/' + ${party.path} + '/posts/' + ${post.id}}" th:method="delete">
+                            <form th:action="@{'/party/' + ${party.id} + '/posts/' + ${post.id}}" th:method="delete">
                                 <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
                             </form>
                         </div>

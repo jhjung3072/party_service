@@ -16,7 +16,7 @@
                 <div class="row">
                     <h2 class="col-sm-12">배너 이미지 사용</h2>
                 </div>
-                <form th:if="${!party.useBanner}" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/banner/enable'}" method="post" novalidate>
+                <form th:if="${!party.useBanner}" action="#" th:action="@{'/party/' + ${party.getId()} + '/settings/banner/enable'}" method="post" novalidate>
                     <div class="alert alert-primary" role="alert">
                         파티 메뉴에서 파티 배너 이미지를 사용합니다. 파티 배너 이미지를 아직 설정하지 않았다면, 기본 배너 이미지를 사용합니다.
                     </div>
@@ -24,7 +24,7 @@
                         <button class="btn btn-outline-primary btn-block" type="submit" aria-describedby="submitHelp">배너 이미지 사용하기</button>
                     </div>
                 </form>
-                <form th:if="${party.useBanner}" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/banner/disable'}" method="post" novalidate>
+                <form th:if="${party.useBanner}" action="#" th:action="@{'/party/' + ${party.getId()} + '/settings/banner/disable'}" method="post" novalidate>
                     <div class="alert alert-info" role="alert">
                         파티 메뉴에서 파티 배너 이미지를 사용하지 않습니다. 파티 목록에서는 배너 이미지를 사용합니다.
                     </div>
@@ -36,7 +36,7 @@
                 <div class="row">
                     <h2 class="col-sm-12">배너 이미지 변경</h2>
                 </div>
-                <form id="imageForm" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/banner'}" method="post" novalidate>
+                <form id="imageForm" action="#" th:action="@{'/party/' + ${party.getId()} + '/settings/banner'}" method="post" novalidate>
                     <div class="form-group">
                         <input id="partyImage" type="hidden" name="image" class="form-control" />
                     </div>

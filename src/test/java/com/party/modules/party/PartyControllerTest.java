@@ -73,7 +73,7 @@ public class PartyControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/party/test-path"));
 
-        Party party = partyRepository.findByPath("test-path");
+        Party party = partyRepository.findPartyById(1L);
         assertNotNull(party);
         Account account = accountRepository.findByNickname("jaeho");
         assertTrue(party.getManagers().contains(account));
@@ -95,7 +95,7 @@ public class PartyControllerTest {
                 .andExpect(model().attributeExists("partyForm"))
                 .andExpect(model().attributeExists("account"));
 
-        Party party = partyRepository.findByPath("test-path");
+        Party party = partyRepository.findPartyById(1L);
         assertNull(party);
     }
 
@@ -104,7 +104,6 @@ public class PartyControllerTest {
     @DisplayName("파티 조회")
     void viewParty() throws Exception {
         Party party = new Party();
-        party.setPath("test-path");
         party.setTitle("test party");
         party.setShortDescription("short description");
         party.setFullDescription("<p>full description</p>");
@@ -122,11 +121,11 @@ public class PartyControllerTest {
     @DisplayName("파티 가입")
     void joinParty() throws Exception {
         Account nana = createAccount("nana");
-        Party party = createParty("test-party", nana);
+        Party party = createParty(123L, nana);
 
-        mockMvc.perform(get("/party/" + party.getPath() + "/join"))
+        mockMvc.perform(get("/party/" + party.getId() + "/join"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/party/" + party.getPath() + "/members"));
+                .andExpect(redirectedUrl("/party/" + party.getId() + "/members"));
 
         Account jaeho = accountRepository.findByNickname("jaeho");
         assertTrue(party.getMembers().contains(jaeho));
@@ -137,20 +136,19 @@ public class PartyControllerTest {
     @DisplayName("파티 탈퇴")
     void leaveParty() throws Exception {
         Account nana = createAccount("nana");
-        Party party = createParty("test-party", nana);
+        Party party = createParty(123L, nana);
         Account jaeho = accountRepository.findByNickname("jaeho");
         partyService.addMember(party, jaeho);
 
-        mockMvc.perform(get("/party/" + party.getPath() + "/leave"))
+        mockMvc.perform(get("/party/" + party.getId() + "/leave"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/party/" + party.getPath() + "/members"));
+                .andExpect(redirectedUrl("/party/" + party.getId() + "/members"));
 
         assertFalse(party.getMembers().contains(jaeho));
     }
 
-    protected Party createParty(String path, Account manager){
+    protected Party createParty(Long id, Account manager){
         Party party = new Party();
-        party.setPath(path);
         partyService.createNewParty(party,manager);
         return party;
     }

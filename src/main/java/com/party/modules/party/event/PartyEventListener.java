@@ -78,7 +78,7 @@ public class PartyEventListener {
     private void createNotification(Party party, Account account, String message, NotificationType notificationType) {
         Notification notification = new Notification();
         notification.setTitle(party.getTitle());
-        notification.setLink("/party/" + party.getEncodedPath());
+        notification.setLink("/party/" + party.getId());
         notification.setChecked(false);
         notification.setCreatedDateTime(LocalDateTime.now());
         notification.setMessage(message);
@@ -90,7 +90,7 @@ public class PartyEventListener {
     private void sendPartyCreatedEmail(Party party, Account account, String contextMessage, String emailSubject) {
         Context context = new Context();
         context.setVariable("nickname", account.getNickname());
-        context.setVariable("link", "/party/" + party.getEncodedPath());
+        context.setVariable("link", "/party/" + party.getId());
         context.setVariable("linkName", party.getTitle());
         context.setVariable("message", contextMessage);
         context.setVariable("host", appProperties.getHost());

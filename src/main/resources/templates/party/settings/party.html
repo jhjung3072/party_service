@@ -15,7 +15,7 @@
                 <div th:replace="fragments.html :: message"></div>
                 <div class="row">
                     <h5 class="col-sm-12">파티 공개 및 종료</h5>
-                    <form th:if="${!party.published && !party.closed}" class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/party/publish'}" method="post" novalidate>
+                    <form th:if="${!party.published && !party.closed}" class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getId()} + '/settings/party/publish'}" method="post" novalidate>
                         <div class="alert alert-info" role="alert">
                             파티를 다른 사용자에게 공개할 준비가 되었다면 버튼을 클릭하세요.<br/>
                             소개, 배너 이미지, 파티 주제 및 활동 플랫폼을 등록했는지 확인하세요.<br/>
@@ -25,7 +25,7 @@
                             <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">파티 공개</button>
                         </div>
                     </form>
-                    <form th:if="${party.published && !party.closed}" class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/party/close'}" method="post" novalidate>
+                    <form th:if="${party.published && !party.closed}" class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getId()} + '/settings/party/close'}" method="post" novalidate>
                         <div class="alert alert-warning" role="alert">
                             파티 활동을 마쳤다면 파티를 종료하세요.<br/>
                             파티를 종료하면 더이상 팀원을 모집하거나 모임을 만들 수 없으며, 파티 경로와 이름을 수정할 수 없습니다.<br/>
@@ -44,7 +44,7 @@
                 <hr th:if="${!party.closed && !party.recruiting && party.published}"/>
                 <div class="row" th:if="${!party.closed && !party.recruiting && party.published}">
                     <h5 class="col-sm-12">팀원 모집</h5>
-                    <form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/recruit/start'}" method="post" novalidate>
+                    <form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getId()} + '/settings/recruit/start'}" method="post" novalidate>
                         <div class="alert alert-info" role="alert">
                             팀원을 모집합니다.<br/>
                             충분한 파티 팀원을 모집했다면 모집을 멈출 수 있습니다.<br/>
@@ -59,7 +59,7 @@
                 <hr th:if="${!party.closed && party.recruiting && party.published}"/>
                 <div class="row" th:if="${!party.closed && party.recruiting && party.published}">
                     <h5 class="col-sm-12">팀원 모집</h5>
-                    <form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/recruit/stop'}" method="post" novalidate>
+                    <form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getId()} + '/settings/recruit/stop'}" method="post" novalidate>
                         <div class="alert alert-primary" role="alert">
                             팀원 모집을 중답합니다.<br/>
                             팀원 충원이 필요할 때 다시 팀원 모집을 시작할 수 있습니다.<br/>
@@ -74,13 +74,13 @@
                 <hr th:if="${!party.closed}"/>
                 <div class="row" th:if="${!party.closed}">
                     <h5 class="col-sm-12">파티 경로</h5>
-                    <form class="col-sm-12 needs-validation" th:action="@{'/party/' + ${party.path} + '/settings/party/path'}"
+                    <form class="col-sm-12 needs-validation" th:action="@{'/party/' + ${party.id} + '/settings/party/path'}"
                           method="post" novalidate>
                         <div class="alert alert-warning" role="alert">
                             파티 경로를 수정하면 이전에 사용하던 경로로 파티에 접근할 수 없으니 주의하세요. <br/>
                         </div>
                         <div class="form-group">
-                            <input id="path" type="text" name="newPath" th:value="${party.path}" class="form-control"
+                            <input id="path" type="text" name="newPath" th:value="${party.id}" class="form-control"
                                    placeholder="예) party-path" aria-describedby="pathHelp" required>
                             <small id="pathHelp" class="form-text text-muted">
                                 공백없이 문자, 숫자, 대시(-)와 언더바(_)만 3자 이상 20자 이내로 입력하세요. 파티 홈 주소에 사용합니다. 예) /party/<b>party-path</b>
@@ -97,7 +97,7 @@
                 <hr th:if="${!party.closed}"/>
                 <div class="row" th:if="${!party.closed}">
                     <h5 class="col-12">파티 이름</h5>
-                    <form class="needs-validation col-12" action="#" th:action="@{'/party/' + ${party.path} + '/settings/party/title'}" method="post" novalidate>
+                    <form class="needs-validation col-12" action="#" th:action="@{'/party/' + ${party.id} + '/settings/party/title'}" method="post" novalidate>
                         <div class="alert alert-warning" role="alert">
                             파티 이름을 수정합니다.<br/>
                         </div>
@@ -120,7 +120,7 @@
                 <hr/>
                 <div class="row" th:if="${party.isRemovable()}">
                     <h5 class="col-sm-12 text-danger">파티 삭제</h5>
-                    <form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/party/remove'}" method="post" novalidate>
+                    <form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getId()} + '/settings/party/remove'}" method="post" novalidate>
                         <div class="alert alert-danger" role="alert">
                             파티를 삭제하면 파티 관련 모든 기록을 삭제하며 복구할 수 없습니다. <br/>
                             <b>다음에 해당하는 파티는 자동으로 삭제 됩니다.</b>
@@ -137,7 +137,7 @@
                 </div>
                 <div class="row" th:if="${!party.isRemovable()}">
                     <h5 class="col-sm-12 text-danger">파티 삭제</h5>
-                    <form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/party/remove'}" method="post" novalidate>
+                    <form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getId()} + '/settings/party/remove'}" method="post" novalidate>
                         <div class="alert alert-danger" role="alert">
                             공개 중이고 모임을 했던 파티는 삭제할 수 없습니다.
                         </div>
