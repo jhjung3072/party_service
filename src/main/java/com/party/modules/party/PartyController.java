@@ -51,7 +51,6 @@ public class PartyController {
         }
 
         Party newParty = partyService.createNewParty(modelMapper.map(partyForm, Party.class), account);
-        //party 경로가 한글이 쓰일 수 있으므로 URLEncoder 사용
         return "redirect:/party/" + newParty.getId();
     }
 

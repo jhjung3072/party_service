@@ -254,6 +254,22 @@ public class PartySettingsController {
         return "redirect:/party/" + party.getId() + "/settings/party";
     }
 
+    @PostMapping("/party/kakaoLink")
+    public String updatePartyKakaoLink(@CurrentAccount Account account, @PathVariable Long id, String newLink,
+                                  Model model, RedirectAttributes attributes) {
+        Party party = partyService.getPartyToUpdateStatus(account, id);
+        if (!partyService.isValidLink(newLink)) {
+            model.addAttribute(account);
+            model.addAttribute(party);
+            model.addAttribute("partyKakaoLinkError", "해당 스터디 경로는 사용할 수 없습니다. 다른 값을 입력하세요.");
+            return "party/settings/party";
+        }
+
+        partyService.updatePartyKakaoLink(party, newLink);
+        attributes.addFlashAttribute("message", "카카오 오픈채팅방 링크를 수정했습니다.");
+        return "redirect:/party/" + party.getId() + "/settings/party";
+    }
+
 
     // 파티 제목 수정 Post
     @PostMapping("/party/title")

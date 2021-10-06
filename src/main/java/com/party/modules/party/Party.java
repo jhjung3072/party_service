@@ -150,7 +150,7 @@ public class Party {
 
     //파티 삭제 가능 여부
     public boolean isRemovable() {
-        return !this.published; // TODO 모임을 했던 파티는 삭제할 수 없다.
+        return !this.published;
     }
 
     // 멤버 추가

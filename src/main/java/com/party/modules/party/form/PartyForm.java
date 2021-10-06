@@ -4,16 +4,13 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Data
 public class PartyForm {
 
-    public static final String VALID_PATH_PATTERN = "^[ㄱ-ㅎ가-힣a-z0-9_-]{2,20}$";
+    public static final String VALID_PATH_PATTERN = "^(https:\\/\\/)(open\\.kakao\\.com)(\\/o\\/)[a-zA-Z0-9]{8}";
 
     @NotBlank
     @Pattern(regexp = VALID_PATH_PATTERN)

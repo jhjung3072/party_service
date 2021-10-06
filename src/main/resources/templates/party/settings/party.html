@@ -73,23 +73,23 @@
 
                 <hr th:if="${!party.closed}"/>
                 <div class="row" th:if="${!party.closed}">
-                    <h5 class="col-sm-12">파티 경로</h5>
-                    <form class="col-sm-12 needs-validation" th:action="@{'/party/' + ${party.id} + '/settings/party/path'}"
+                    <h5 class="col-sm-12">카카오톡 오픈채팅방 링크</h5>
+                    <form class="col-sm-12 needs-validation" th:action="@{'/party/' + ${party.id} + '/settings/party/kakaoLink'}"
                           method="post" novalidate>
                         <div class="alert alert-warning" role="alert">
-                            파티 경로를 수정하면 이전에 사용하던 경로로 파티에 접근할 수 없으니 주의하세요. <br/>
+                            카카오톡 오픈채팅방 링크를 수정하시려면 아래 칸을 수정해주세요 <br/>
                         </div>
                         <div class="form-group">
-                            <input id="path" type="text" name="newPath" th:value="${party.id}" class="form-control"
+                            <input id="kakaoLink" type="text" name="newLink" th:value="${party.kakaoLink}" class="form-control"
                                    placeholder="예) party-path" aria-describedby="pathHelp" required>
                             <small id="pathHelp" class="form-text text-muted">
-                                공백없이 문자, 숫자, 대시(-)와 언더바(_)만 3자 이상 20자 이내로 입력하세요. 파티 홈 주소에 사용합니다. 예) /party/<b>party-path</b>
+                                카카오 오픈채팅방 링크를 입력하세요 예) https://open.kakao.com/o/<b>sFTnxyDd</b>
                             </small>
                             <small class="invalid-feedback">파티 경로를 입력하세요.</small>
-                            <small class="form-text text-danger" th:if="${partyPathError}" th:text="${partyPathError}">Path Error</small>
+                            <small class="form-text text-danger" th:if="${partyKakaoLinkError}" th:text="${partyKakaoLinkError}">Path Error</small>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-outline-warning" type="submit" aria-describedby="submitHelp">경로 수정</button>
+                            <button class="btn btn-outline-warning" type="submit" aria-describedby="submitHelp">링크 수정</button>
                         </div>
                     </form>
                 </div>
@@ -123,12 +123,6 @@
                     <form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getId()} + '/settings/party/remove'}" method="post" novalidate>
                         <div class="alert alert-danger" role="alert">
                             파티를 삭제하면 파티 관련 모든 기록을 삭제하며 복구할 수 없습니다. <br/>
-                            <b>다음에 해당하는 파티는 자동으로 삭제 됩니다.</b>
-                            <ul>
-                                <li>만든지 1주일이 지난 비공개 파티</li>
-                                <li>파티 공개 이후, 한달 동안 모임을 만들지 않은 파티</li>
-                                <li>파티 공개 이후, 모임을 만들지 않고 종료한 파티</li>
-                            </ul>
                         </div>
                         <div class="form-group">
                             <button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp">파티 삭제</button>
@@ -139,7 +133,7 @@
                     <h5 class="col-sm-12 text-danger">파티 삭제</h5>
                     <form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getId()} + '/settings/party/remove'}" method="post" novalidate>
                         <div class="alert alert-danger" role="alert">
-                            공개 중이고 모임을 했던 파티는 삭제할 수 없습니다.
+                            공개를 했던 파티는 삭제할 수 없습니다.
                         </div>
                         <div class="form-group">
                             <button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp" disabled>파티 삭제</button>

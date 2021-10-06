@@ -11,7 +11,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface PartyRepository extends JpaRepository<Party, Long>, PartyRepositoryExtension {
 
-    boolean existsById(Long id);
+    boolean existsByKakaoLink(String kakaoLink);
 
     @EntityGraph(attributePaths = {"tags", "platforms", "managers", "members"}, type = EntityGraph.EntityGraphType.LOAD)
     Party findPartyById(Long id);

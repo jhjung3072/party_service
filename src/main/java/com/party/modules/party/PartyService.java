@@ -182,6 +182,17 @@ public class PartyService {
         party.removeMember(account);
     }
 
+    public boolean isValidLink(String newLink) {
+        if (!newLink.matches(VALID_PATH_PATTERN)) {
+            return false;
+        }
+
+        return !repository.existsByKakaoLink(newLink);
+    }
+    public void updatePartyKakaoLink(Party party, String newLink) {
+        party.setKakaoLink(newLink);
+    }
+
     public void generateTestStudies(Account account) {
         for (int i=0; i<30; i++){
             String randomvalue= RandomString.make(5);
@@ -198,4 +209,6 @@ public class PartyService {
             newParty.getTags().add(netflix);
         }
     }
+
+
 }
