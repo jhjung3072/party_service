@@ -10,15 +10,16 @@
             </div>
             <div class="col-8">
                 <div class="row">
-                    <h2 class="col-12">관심있는 파티 주제</h2>
+                    <h2 class="col-12">재밌게 본 작품</h2>
                 </div>
                 <div class="row">
                     <div class="col-12">
                         <div class="alert alert-info" role="alert">
-                            참여하고 싶은 파티 주제를 입력해 주세요. 해당 주제의 파티가 생기면 알림을 받을 수 있습니다. 태그를 입력하고 콤마(,)
-                            또는 엔터를 입력하세요.
+                            재밌게 본 드라마, 영화 등을 등록하여 취향에 맞는 파티를 찾아보세요!
                         </div>
+                        <!--tagRepository 에 저장된 모든 태그 리스트 -->
                         <div id="whitelist" th:text="${whitelist}" hidden></div>
+                        <!--현재 파티에 등록된 태그 리스트-->
                         <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}"
                                class="tagify-outside" aria-describedby="tagHelp"/>
                     </div>

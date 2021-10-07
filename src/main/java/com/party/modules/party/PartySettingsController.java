@@ -254,6 +254,7 @@ public class PartySettingsController {
         return "redirect:/party/" + party.getId() + "/settings/party";
     }
 
+    // 카카오 오픈채팅방 링크 수정 Post
     @PostMapping("/party/kakaoLink")
     public String updatePartyKakaoLink(@CurrentAccount Account account, @PathVariable Long id, String newLink,
                                   Model model, RedirectAttributes attributes) {

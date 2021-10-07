@@ -117,6 +117,7 @@
     }())
 </script>
 
+<!--참고 : https://velog.io/@max9106/Spring-Security-csrf-->
 <script type="application/javascript" th:inline="javascript" th:fragment="ajax-csrf-header">
     $(function() {
         var csrfToken = /*[[${_csrf.token}]]*/ null;
@@ -254,9 +255,20 @@
     <script type="application/javascript">
         $(function () {
             $('.editor').summernote({
-                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
-                tabsize: 2,
-                height: 300
+                toolbar: [
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
+                    ['color', ['forecolor','color']],
+                    ['table', ['table']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['insert',['picture','link','video']],
+                    ['view', ['fullscreen', 'help']]
+                ],
+                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'],
+                fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
+                height:400
             });
         });
     </script>
@@ -367,6 +379,7 @@
     </script>
 </div>
 
+<!--참고 : https://www.npmjs.com/package/@yaireo/tagify/v/4.0.3#ajax-whitelist-->
 <div th:fragment="update-platforms (baseUrl)">
     <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
     <script type="application/javascript">
@@ -401,13 +414,14 @@
                 enforceWhitelist: true,
                 whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
                 dropdown : {
-                    enabled: 1, // suggest tags after a single character input
-                } // map tags
+                    enabled: 3,
+                }
             });
 
             tagify.on("add", onAdd);
             tagify.on("remove", onRemove);
 
+            //참고 : http://47.104.247.130/eims-demo/vendor/npm/yaireo--tagify/
             // add a class to Tagify's input element
             tagify.DOM.input.classList.add('form-control');
             // re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
@@ -416,6 +430,7 @@
     </script>
 </div>
 
+<!--참고 : https://velog.io/@dojunggeun/JavaScript-Moment.js%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-Date-Time-%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0-->
 <div th:fragment="date-time">
     <script src="/node_modules/moment/min/moment-with-locales.min.js"></script>
     <script type="application/javascript">
@@ -452,7 +467,7 @@
         <h2>
             <a th:href="@{'/party/' + ${party.id}}"><span th:text="${party.title}">파티</span></a> /
             <span th:if="${mode == 'edit'}" th:text="${post.title}"></span>
-            <span th:if="${mode == 'new'}">추천 작품 공유하기</span>
+            <span th:if="${mode == 'new'}">추천 작품 게시글</span>
         </h2>
     </div>
     <div class="row justify-content-center">
@@ -460,13 +475,13 @@
               th:action="@{${action}}"
               th:object="${postForm}" method="post" novalidate>
             <div class="form-group">
-                <label for="title">제목</label>
+                <label for="title">게시글 제목</label>
                 <input id="title" type="text" th:field="*{title}" class="form-control"
-                       placeholder="작품 이름" aria-describedby="titleHelp" required>
+                       placeholder="게시글 제목" aria-describedby="titleHelp" required>
                 <small id="titleHelp" class="form-text text-muted">
-                    제목을 입력하세요
+                    게시글 제목을 입력하세요
                 </small>
-                <small class="invalid-feedback">제목을 입력하세요 입력하세요.</small>
+                <small class="invalid-feedback">게시글 제목을 입력하세요 입력하세요.</small>
                 <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error</small>
             </div>
             <div class="form-group">
@@ -529,7 +544,7 @@
                             <i class="fa fa-user-circle"></i> 남은 인원
                             <span th:text="${party.numberOfRemainSpots}"></span>명
                         </small>
-                        <small class="text-muted date" th:text="${party.publishedDateTime}">9 mins</small>
+                        <small class="text-muted date" th:text="${party.publishedDateTime}"></small>
                     </div>
                 </div>
             </div>

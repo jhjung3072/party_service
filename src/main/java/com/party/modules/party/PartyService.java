@@ -182,6 +182,7 @@ public class PartyService {
         party.removeMember(account);
     }
 
+    // 카카오 오픈채팅방 링크 검사
     public boolean isValidLink(String newLink) {
         if (!newLink.matches(VALID_PATH_PATTERN)) {
             return false;
@@ -189,6 +190,8 @@ public class PartyService {
 
         return !repository.existsByKakaoLink(newLink);
     }
+    
+    // 카카오 오픈채팅방 링크 수정
     public void updatePartyKakaoLink(Party party, String newLink) {
         party.setKakaoLink(newLink);
     }
